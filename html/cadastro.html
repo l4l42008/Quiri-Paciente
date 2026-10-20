@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiri — Cadastro do paciente</title>
+
+    <!-- prepara pra carregar as fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- carrega as fontes -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- carrega os icones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        /* tira os espacos padrao e facilita a organizacao dos elementos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* centraliza o formulario e define o fundo verde da pagina */
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            background: #2D6A4F;
+            color: #F5EFE0;
+            font-family: 'Montserrat', sans-serif;
+            padding: 35px 18px;
+        }
+
+        /* organiza o conteudo e limita a largura do cadastro */
+        .card {
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* define o tamanho da logo e o espaco abaixo dela */
+        .logo {
+            width: 190px;
+            height: auto;
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        /* estiliza o titulo principal do cadastro */
+        .titulo {
+            color: #F5EFE0;
+            font-size: 1.15rem;
+            font-weight: 800;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        /* organiza os campos do formulario em coluna */
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* faz cada campo ocupar toda a largura disponivel */
+        .field {
+            width: 100%;
+        }
+
+        /* estiliza os nomes dos campos do formulario */
+        .field label {
+            display: block;
+            font-size: .7rem;
+            font-weight: 700;
+            margin: 0 0 6px 2px;
+            color: #F5EFE0;
+        }
+
+        /* organiza o icone e o campo dentro da caixa creme */
+        .field-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 51px;
+            padding: 0 14px;
+            background: #F5EFE0;
+            border: 1.5px solid transparent;
+            border-radius: 8px;
+        }
+
+        /* destaca a borda qnd algum campo da caixa estiver selecionado */
+        .field-wrap:focus-within {
+            border-color: #2D6A4F;
+        }
+
+        /* ajusta a cor e o tamanho dos icones dos campos */
+        .field-icon {
+            color: #2D6A4F;
+            width: 16px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        /* ajusta os campos pra ocupar o espaco q sobrar na caixa */
+        .field-wrap input {
+            flex: 1;
+            width: 100%;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: #2D6A4F;
+            font-family: inherit;
+            font-size: .76rem;
+            font-weight: 600;
+        }
+
+        /* define a cor do texto de exemplo dentro dos campos */
+        .field-wrap input::placeholder {
+            color: #2D6A4F;
+            opacity: 1;
+        }
+
+        /* mantem o seletor de data no modo claro */
+        .field-wrap input[type="date"] {
+            color-scheme: light;
+        }
+
+        /* estiliza o botao q mostra ou esconde a senha */
+        .toggle-pass {
+            background: none;
+            border: none;
+            color: #2D6A4F;
+            cursor: pointer;
+            padding: 7px;
+        }
+
+        /* cria a barra q indica a forca da senha */
+        .password-strength {
+            height: 4px;
+            background: #F5EFE0;
+            border-radius: 3px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        /* define o inicio da barra de forca da senha */
+        #pw-bar {
+            width: 0;
+            height: 100%;
+            transition: width .2s;
+        }
+
+        /* destaca o titulo da parte de escolha do nutricionista */
+        .section-title {
+            color: #F5EFE0;
+            font-size: .78rem;
+            font-weight: 800;
+            letter-spacing: .05em;
+            margin-top: 10px;
+        }
+
+        /* organiza as opcoes de nutricionistas uma abaixo da outra */
+        .nutri-list {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        /* estiliza cada opcao de nutricionista */
+        .nutri-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            border: 1.5px solid #2D6A4F;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: border-color .2s, background .2s;
+        }
+
+        /* destaca a opcao qnd ela for selecionada */
+        .nutri-option:has(input:checked) {
+            border-color: #2D6A4F;
+            background: #F5EFE0;
+        }
+
+        /* ajusta os botoes de selecao dos nutricionistas */
+        .nutri-option input {
+            accent-color: #2D6A4F;
+            width: 17px;
+            height: 17px;
+            flex-shrink: 0;
+        }
+
+        /* organiza as informacoes de cada nutricionista */
+        .nutri-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        /* destaca o nome do nutricionista */
+        .nutri-nome {
+            font-size: .78rem;
+            font-weight: 800;
+            overflow-wrap: anywhere;
+        }
+
+        /* ajusta o texto q mostra o crn do nutricionista */
+        .nutri-crn {
+            font-size: .7rem;
+            color: #2D6A4F;
+        }
+
+        /* organiza as mensagens de status da lista */
+        .status {
+            font-size: .72rem;
+            line-height: 1.5;
+            color: #F5EFE0;
+        }
+
+        /* esconde as mensagens de erro ate precisar mostrar */
+        .error-msg {
+            display: none;
+            color: #F5EFE0;
+            font-size: .72rem;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        /* mostra a mensagem de erro qnd a classe show for adicionada */
+        .error-msg.show {
+            display: block;
+        }
+
+        /* estiliza o botao principal de cadastro */
+        .btn-primary {
+            width: 100%;
+            min-height: 53px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 10px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            font-family: inherit;
+            font-size: .88rem;
+            font-weight: 800;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        /* destaca o botao qnd o mouse passa por cima */
+        .btn-primary:hover {
+            background: #F5EFE0;
+        }
+
+        /* mostra q o botao ta indisponivel durante o envio */
+        .btn-primary:disabled {
+            opacity: .65;
+            cursor: wait;
+        }
+
+        /* organiza o link pra quem ja tem conta */
+        .auth-link {
+            margin-top: 22px;
+            color: #F5EFE0;
+            font-size: .72rem;
+            text-align: center;
+        }
+
+        /* destaca o link q leva pra tela de login */
+        .auth-link a {
+            color: #F5EFE0;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        /* define o estilo da caixa de notificacao */
+        .toast {
+            display: none;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            color: #2D6A4F;
+            font-size: .75rem;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        /* mostra a notificacao qnd a classe show for adicionada */
+        .toast.show {
+            display: block;
+        }
+
+        /* ajusta os espacos e a logo em telas menores */
+        @media (max-width: 350px) {
+            body {
+                padding: 25px 13px;
+            }
+
+            .logo {
+                width: 150px;
+            }
+        }
+
+        /* tira as animacoes pra quem prefere menos movimento */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- agrupa todo o conteudo do cadastro do paciente -->
+    <main class="card">
+        <!-- mostra a logo do quiri -->
+        <img class="logo" src="/imagens/logobranca.png" alt="Logo Quiri">
+
+        <!-- mostra o titulo da pagina de cadastro -->
+        <h1 class="titulo">CADASTRO PACIENTE</h1>
+
+        <!-- exibe avisos e mensagens do cadastro -->
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+        <!-- agrupa os campos usados pra criar a conta do paciente -->
+        <form id="formCadastroPaciente" autocomplete="on" novalidate>
+            <!-- campo pra informar o nome completo -->
+            <div class="field">
+                <div class="field-wrap">
+                    <i class="field-icon fa-solid fa-user" aria-hidden="true"></i>
+                    <input type="text" id="cad-nome" placeholder="NOME COMPLETO" maxlength="100" autocomplete="name" required>
+                </div>
+            </div>
+
+            <!-- campo pra informar o cpf -->
+            <div class="field">
+                <div class="field-wrap">
+                    <i class="field-icon fa-solid fa-id-card" aria-hidden="true"></i>
+                    <input type="text" id="cad-cpf" placeholder="CPF" maxlength="14" autocomplete="off" inputmode="numeric" required>
+                </div>
+            </div>
+
+            <!-- campo pra informar a data de nascimento -->
+            <div class="field">
+                <label for="cad-nascimento">*DATA DE NASCIMENTO</label>
+                <div class="field-wrap">
+                    <i class="field-icon fa-solid fa-calendar" aria-hidden="true"></i>
+                    <input type="date" id="cad-nascimento" autocomplete="bday" required>
+                </div>
+            </div>
+
+            <!-- campo pra informar o telefone -->
+            <div class="field">
+                <div class="field-wrap">
+                    <i class="field-icon fa-solid fa-phone" aria-hidden="true"></i>
+                    <input type="tel" id="cad-telefone" placeholder="(00) 00000-0000" maxlength="15" autocomplete="tel" required>
+                </div>
+            </div>
+
+            <!-- campo pra informar o email -->
+            <div class="field">
+                <div class="field-wrap">
+                    <i class="field-icon fa-solid fa-envelope" aria-hidden="true"></i>
+                    <input type="email" id="cad-email" placeholder="E-MAIL" maxlength="255" autocomplete="email" required>
+                </div>
+            </div>
+
+            <!-- campo pra criar a senha e mostrar sua forca -->
+            <div class="field">
+                <div class="field-wrap">
+                    <i class="field-icon fa-solid fa-lock" aria-hidden="true"></i>
+                    <input type="password" id="cad-senha" placeholder="MÍNIMO 6 CARACTERES" minlength="6" autocomplete="new-password" required>
+                    <button type="button" class="toggle-pass" data-target="cad-senha" aria-label="Mostrar senha">
+                        <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="password-strength">
+                    <div id="pw-bar"></div>
+                </div>
+            </div>
+
+            <!-- campo pra repetir a senha e confirmar q ta igual -->
+            <div class="field">
+                <div class="field-wrap">
+                    <i class="field-icon fa-solid fa-lock" aria-hidden="true"></i>
+                    <input type="password" id="cad-senha2" placeholder="REPITA A SENHA" minlength="6" autocomplete="new-password" required>
+                    <button type="button" class="toggle-pass" data-target="cad-senha2" aria-label="Mostrar senha">
+                        <i class="fa-solid fa-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="error-msg" id="err-senha">As senhas não coincidem.</div>
+            </div>
+
+            <!-- mostra a parte onde o paciente escolhe o nutricionista -->
+            <h2 class="section-title">ESCOLHA SEU NUTRICIONISTA</h2>
+
+            <!-- informa o status enquanto a lista de nutricionistas carrega -->
+            <p class="status" id="status-nutricionistas" role="status">Carregando nutricionistas...</p>
+
+            <!-- recebe as opcoes de nutricionistas carregadas pelo javascript -->
+            <div class="nutri-list" id="lista-nutricionistas"></div>
+
+            <!-- mostra o erro caso nenhuma opcao valida seja escolhida -->
+            <div class="error-msg" id="err-nutricionista">Selecione um nutricionista ou escolha "Nenhum nutricionista".</div>
+
+            <!-- envia os dados pra criar a conta -->
+            <button class="btn-primary" id="btn-cadastrar" type="submit">Criar minha conta</button>
+        </form>
+
+        <!-- leva pra tela de login caso o usuario ja tenha uma conta -->
+        <div class="auth-link">
+            Já tem conta?
+            <a href="/login.html">Entrar</a>
+        </div>
+    </main>
+
+    <!-- carrega o javascript q controla o cadastro do paciente -->
+    <script src="/js/cadastro.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,1060 @@
+/* reseta as configuracoes gerais */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* corpo da pagina */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #e8e0d0;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* container principal do app */
+.app {
+  background: #F5EFE0;
+  width: 100%;
+  max-width: 1600px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* barra superior */
+.topbar {
+  background: #2D6A4F;
+  color: #F5EFE0;
+  padding: 16px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  min-height: 72px;
+}
+
+/* logo no topo */
+.topbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* nome do app no topo */
+.topbar-logo span {
+  font-size: 25px;
+  font-weight: 600;
+  color: #F5EFE0;
+}
+
+/* area dos itens do lado direito do topo */
+.topbar-right {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+/* icones do lado direito do topo */
+.topbar-right i {
+  font-size: 22px;
+  color: #F5EFE0;
+  cursor: pointer;
+}
+
+/* botao de voltar */
+.topbar-back {
+  background: none;
+  border: none;
+  color: #F5EFE0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+/* area principal de apresentacao */
+.hero {
+  background: #2D6A4F;
+  padding: 0 40px 30px;
+  color: #F5EFE0;
+}
+
+/* saudacao no topo da apresentacao */
+.hero-greeting {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 4px;
+}
+
+/* nome mostrado na apresentacao */
+.hero-name {
+  font-size: 28px;
+  font-weight: 500;
+}
+
+/* texto abaixo do nome */
+.hero-sub {
+  font-size: 14px;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+/* identificacao mostrada na apresentacao */
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 5px 12px;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+/* onda abaixo da apresentacao */
+.hero-wave {
+  width: 100%;
+  height: 30px;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* cabecalho das telas de login e cadastro */
+.auth-hero {
+  background: #2D6A4F;
+  padding: 50px 40px 35px;
+  color: #F5EFE0;
+  text-align: center;
+}
+
+/* titulo das telas de login e cadastro */
+.auth-hero-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+/* subtitulo das telas de login e cadastro */
+.auth-hero-sub {
+  font-size: 14px;
+  opacity: 0.75;
+  margin-top: 6px;
+}
+
+/* area dos formularios */
+.auth-body {
+  flex: 1;
+  padding: 40px;
+  background: #F5EFE0;
+  overflow-y: auto;
+}
+
+/* titulo dentro dos formularios */
+.auth-body h2 {
+  font-size: 22px;
+  font-weight: 500;
+  color: #1B4332;
+  margin-bottom: 24px;
+}
+
+/* nome dos campos */
+.field-label {
+  font-size: 13px;
+  color: #6B9C84;
+  margin-bottom: 6px;
+  margin-top: 18px;
+  font-weight: 500;
+}
+
+/* primeiro nome de campo */
+.field-label:first-child {
+  margin-top: 0;
+}
+
+/* campos de entrada */
+.field-input {
+  width: 100%;
+  border: 1px solid #c8dfd4;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 14px;
+  color: #1B4332;
+  background: #fff;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+/* campo quando esta selecionado */
+.field-input:focus {
+  border-color: #2D6A4F;
+}
+
+/* campo com erro */
+.field-input.error {
+  border-color: #c0625a;
+}
+
+/* mensagem de erro */
+.error-msg {
+  font-size: 12px;
+  color: #c0625a;
+  margin-top: 4px;
+  display: none;
+}
+
+/* mensagem de erro visivel */
+.error-msg.show {
+  display: block;
+}
+
+/* botao verde principal */
+.btn-green {
+  background: #2D6A4F;
+  color: #F5EFE0;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 500;
+  width: 100%;
+  cursor: pointer;
+  margin-top: 20px;
+  font-family: inherit;
+}
+
+/* efeito ao clicar no botao verde */
+.btn-green:active {
+  opacity: 0.85;
+}
+
+/* botao com borda */
+.btn-outline {
+  background: transparent;
+  color: #2D6A4F;
+  border: 1px solid #2D6A4F;
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 500;
+  width: 100%;
+  cursor: pointer;
+  margin-top: 10px;
+  font-family: inherit;
+}
+
+/* area dos links de autenticacao */
+.auth-link {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 13px;
+  color: #6B9C84;
+}
+
+/* link dentro da area de autenticacao */
+.auth-link a {
+  color: #2D6A4F;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* aviso temporario na tela */
+.toast {
+  position: fixed;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 13px;
+  padding: 10px 18px;
+  border-radius: 20px;
+  display: none;
+  white-space: nowrap;
+  z-index: 999;
+  font-family: inherit;
+}
+
+/* aviso temporario visivel */
+.toast.show {
+  display: block;
+}
+
+/* fundo escuro dos modais */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 100;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+/* fundo do modal quando esta aberto */
+.overlay.open {
+  display: flex;
+}
+
+/* caixa principal do modal */
+.modal-box {
+  background: #fff;
+  border-radius: 18px;
+  padding: 28px 30px 30px;
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+}
+
+/* titulo do modal */
+.modal-box h3 {
+  font-size: 19px;
+  font-weight: 500;
+  color: #1B4332;
+  margin-bottom: 18px;
+}
+
+/* botao de fechar o modal */
+.modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #6B9C84;
+}
+
+/* area das secoes */
+.section {
+  padding: 25px 40px 0;
+}
+
+/* titulo das secoes */
+.section-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1B4332;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 14px;
+}
+
+/* area com rolagem do conteudo */
+.content-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 100px;
+}
+
+/* linha de cards */
+.cards-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+/* card principal */
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 0.5px solid #c8dfd4;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+/* efeito ao clicar no card */
+.card:active {
+  transform: scale(0.97);
+}
+
+/* area do icone do card */
+.card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #E8F5EE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* icone dentro do card */
+.card-icon i {
+  font-size: 21px;
+  color: #2D6A4F;
+}
+
+/* nome do card */
+.card-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1B4332;
+  line-height: 1.3;
+}
+
+/* texto menor do card */
+.card-sub {
+  font-size: 12px;
+  color: #6B9C84;
+}
+
+/* card que ocupa toda a linha */
+.card-wide {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+}
+
+/* icone do card maior */
+.card-wide .card-icon {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+}
+
+/* icone dentro do card maior */
+.card-wide .card-icon i {
+  font-size: 25px;
+}
+
+/* texto do card maior */
+.card-wide .card-text {
+  flex: 1;
+}
+
+/* linha de estatisticas */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+/* card de estatistica */
+.stat-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  border: 0.5px solid #c8dfd4;
+}
+
+/* numero da estatistica */
+.stat-num {
+  font-size: 30px;
+  font-weight: 500;
+  color: #2D6A4F;
+}
+
+/* nome da estatistica */
+.stat-label {
+  font-size: 12px;
+  color: #6B9C84;
+  margin-top: 3px;
+}
+
+/* card do paciente */
+.patient-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 15px 18px;
+  border: 0.5px solid #c8dfd4;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+
+/* efeito ao clicar no paciente */
+.patient-card:active {
+  transform: scale(0.98);
+}
+
+/* avatar do paciente */
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #E8F5EE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2D6A4F;
+  flex-shrink: 0;
+}
+
+/* informacoes do paciente */
+.patient-info {
+  flex: 1;
+}
+
+/* nome do paciente */
+.patient-name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1B4332;
+}
+
+/* informacoes menores do paciente */
+.patient-sub {
+  font-size: 12px;
+  color: #6B9C84;
+  margin-top: 2px;
+}
+
+/* etiqueta do paciente */
+.patient-badge {
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* etiqueta de paciente normal */
+.badge-ok {
+  background: #E8F5EE;
+  color: #2D6A4F;
+}
+
+/* etiqueta de alerta */
+.badge-warn {
+  background: #fef3e2;
+  color: #8a5c00;
+}
+
+/* bloco da agenda */
+.sched-block {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  border: 0.5px solid #c8dfd4;
+  margin-bottom: 20px;
+}
+
+/* linha dos dias do calendario */
+.cal-row {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+/* bloco de cada dia */
+.cal-day {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+/* nome do dia */
+.cal-day-name {
+  font-size: 11px;
+  color: #6B9C84;
+  text-transform: uppercase;
+}
+
+/* numero do dia */
+.cal-day-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* dia disponivel */
+.cal-avail {
+  background: #E8F5EE;
+  color: #2D6A4F;
+}
+
+/* dia ocupado */
+.cal-busy {
+  background: #fef3e2;
+  color: #8a5c00;
+}
+
+/* dia sem horario disponivel */
+.cal-full {
+  background: #f0e8e8;
+  color: #c0625a;
+}
+
+/* dia atual */
+.cal-today {
+  background: #2D6A4F;
+  color: #fff;
+}
+
+/* dia sem destaque */
+.cal-neutral {
+  color: #aaa;
+}
+
+/* linha de consulta */
+.appt-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 0.5px solid #eef4f0;
+}
+
+/* ultima linha de consulta */
+.appt-row:last-child {
+  border-bottom: none;
+}
+
+/* horario da consulta */
+.appt-time {
+  font-size: 13px;
+  font-weight: 500;
+  color: #2D6A4F;
+  width: 55px;
+  flex-shrink: 0;
+}
+
+/* nome da consulta */
+.appt-name {
+  font-size: 14px;
+  color: #1B4332;
+  flex: 1;
+}
+
+/* botoes de acao da consulta */
+.appt-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* botoes com icone */
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6B9C84;
+  font-size: 17px;
+  padding: 3px;
+}
+
+/* cor do icone ao passar o mouse */
+.icon-btn:hover {
+  color: #2D6A4F;
+}
+
+/* cor do icone vermelho ao passar o mouse */
+.icon-btn.red:hover {
+  color: #c0625a;
+}
+
+/* cabecalho do paciente da dieta */
+.diet-patient-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+/* etiqueta da dieta */
+.diet-badge {
+  background: #E8F5EE;
+  color: #2D6A4F;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 4px 11px;
+  border-radius: 20px;
+}
+
+/* linha da refeicao */
+.meal-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 0.5px solid #eef4f0;
+}
+
+/* ultima linha da refeicao */
+.meal-row:last-child {
+  border-bottom: none;
+}
+
+/* ponto da refeicao */
+.meal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2D6A4F;
+  flex-shrink: 0;
+}
+
+/* ponto alternativo da refeicao */
+.meal-dot.alt {
+  background: #95C9A8;
+}
+
+/* nome da refeicao */
+.meal-name {
+  font-size: 14px;
+  color: #1B4332;
+  flex: 1;
+}
+
+/* quantidade de calorias */
+.meal-kcal {
+  font-size: 12px;
+  color: #6B9C84;
+}
+
+/* item do relatorio */
+.report-item {
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px 18px;
+  border: 0.5px solid #c8dfd4;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* area do icone do relatorio */
+.report-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #E8F5EE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* icone do relatorio */
+.report-icon i {
+  font-size: 19px;
+  color: #2D6A4F;
+}
+
+/* informacoes do relatorio */
+.report-info {
+  flex: 1;
+}
+
+/* nome do relatorio */
+.report-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1B4332;
+}
+
+/* data do relatorio */
+.report-date {
+  font-size: 12px;
+  color: #6B9C84;
+}
+
+/* botoes do relatorio */
+.report-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* area do leitor */
+.scanner-box {
+  background: #fff;
+  border-radius: 14px;
+  padding: 30px;
+  border: 0.5px solid #c8dfd4;
+  text-align: center;
+  margin-bottom: 20px;
+  min-height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* item de feedback */
+.feedback-item {
+  background: #fff;
+  border-radius: 14px;
+  padding: 16px 18px;
+  border: 0.5px solid #c8dfd4;
+  margin-bottom: 12px;
+}
+
+/* cabecalho do feedback */
+.fb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+/* produto do feedback */
+.fb-product {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1B4332;
+}
+
+/* paciente do feedback */
+.fb-patient {
+  font-size: 12px;
+  color: #6B9C84;
+  margin-top: 2px;
+}
+
+/* estrelas do feedback */
+.fb-stars {
+  color: #d4b27a;
+  font-size: 15px;
+}
+
+/* comentario do feedback */
+.fb-comment {
+  font-size: 13px;
+  color: #4a7060;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* barra inferior do dashboard */
+.bottom-nav {
+  background: #fff;
+  border-top: 0.5px solid #c8dfd4;
+  display: flex;
+  justify-content: center;
+  gap: 70px;
+  padding: 12px 20px 10px;
+  position: sticky;
+  bottom: 0;
+  flex-shrink: 0;
+}
+
+/* item da barra inferior */
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  min-width: 55px;
+}
+
+/* icone da barra inferior */
+.nav-item i {
+  font-size: 22px;
+  color: #6B9C84;
+}
+
+/* icone ativo da barra inferior */
+.nav-item.active i {
+  color: #2D6A4F;
+}
+
+/* texto da barra inferior */
+.nav-item span {
+  font-size: 11px;
+  color: #6B9C84;
+}
+
+/* texto ativo da barra inferior */
+.nav-item.active span {
+  color: #2D6A4F;
+}
+
+/* resultado das informacoes nutricionais */
+.nutri-result {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  border: 0.5px solid #c8dfd4;
+  margin-top: 15px;
+  display: none;
+}
+
+/* aviso de compatibilidade */
+.compat-ok {
+  background: #E8F5EE;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #2D6A4F;
+  margin-top: 12px;
+}
+
+/* barra de forca da senha */
+.pw-strength {
+  height: 4px;
+  border-radius: 2px;
+  margin-top: 6px;
+  transition: width 0.3s;
+  background: #c8dfd4;
+}
+
+/* preenchimento da barra de forca da senha */
+.pw-strength-bar {
+  height: 4px;
+  border-radius: 2px;
+  width: 0;
+  transition: width 0.3s, background 0.3s;
+}
+
+/* aviso de sucesso em linha */
+.inline-ok {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #E8F5EE;
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: #2D6A4F;
+  margin-top: 10px;
+}
+
+/* campos de selecao */
+select.field-input {
+  appearance: none;
+}
+
+/* botoes das abas */
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 18px;
+  font-size: 14px;
+  color: #6B9C84;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+/* aba selecionada */
+.tab-btn.active {
+  color: #2D6A4F;
+  border-bottom-color: #2D6A4F;
+  font-weight: 500;
+}
+
+/* ajustes gerais para telas menores */
+@media (max-width: 900px) {
+
+/* container principal em telas menores */
+  .app {
+    max-width: 100%;
+  }
+
+/* cards em duas colunas */
+  .cards-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+/* estatisticas em duas colunas */
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+/* espaco lateral das secoes */
+  .section {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+/* espaco dos formularios */
+  .auth-body {
+    padding: 30px 24px;
+  }
+
+/* espaco da apresentacao */
+  .hero {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+/* ajustes para celular */
+@media (max-width: 600px) {
+
+/* espaco da barra superior no celular */
+  .topbar {
+    padding: 14px 16px 10px;
+  }
+
+/* tamanho do nome do app no celular */
+  .topbar-logo span {
+    font-size: 22px;
+  }
+
+/* espaco da apresentacao no celular */
+  .hero {
+    padding: 0 16px 24px;
+  }
+
+/* tamanho do nome na apresentacao */
+  .hero-name {
+    font-size: 20px;
+  }
+
+/* espaco do cabecalho de autenticacao */
+  .auth-hero {
+    padding: 32px 24px 28px;
+  }
+
+/* espaco do formulario no celular */
+  .auth-body {
+    padding: 24px 20px;
+  }
+
+/* espaco das secoes no celular */
+  .section {
+    padding: 16px 16px 0;
+  }
+
+/* cards em duas colunas no celular */
+  .cards-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+/* estatisticas em duas colunas no celular */
+  .stats-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+/* itens da barra inferior distribuidos */
+  .bottom-nav {
+    gap: 0;
+    justify-content: space-around;
+  }
+}

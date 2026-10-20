@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiri — Área do paciente</title>
+
+    <!-- carrega os icones -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+    <style>
+        /* ajusta o tamanho dos elementos */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* define as cores e a fonte principal da pagina */
+        body {
+            margin: 0;
+            background: #2D6A4F;
+            color: #F5EFE0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* impede a rolagem qnd o menu ou modal estiver aberto */
+        body.menu-aberto,
+        body.modal-aberto {
+            overflow: hidden;
+        }
+
+        /* padroniza os botoes */
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+
+        /* organiza a barra superior */
+        .topbar {
+            height: 108px;
+            background: #F5EFE0;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            padding: 0 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* posiciona a logo */
+        .topbar-logo {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* define o tamanho da imagem da logo */
+        .topbar-logo img {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+        }
+
+        /* posiciona o botao de abrir o menu */
+        .botao-menu {
+            grid-column: 3;
+            justify-self: end;
+            width: 46px;
+            height: 46px;
+            border: none;
+            border-radius: 8px;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* destaca o botao qnd o mouse passa por cima */
+        .botao-menu:hover {
+            background: rgba(45, 106, 79, .08);
+        }
+
+        /* monta as tres linhas do icone do menu */
+        .botao-menu span {
+            width: 24px;
+            height: 2.5px;
+            border-radius: 3px;
+            background: #2D6A4F;
+        }
+
+        /* cria o fundo escuro atras do menu */
+        .fundo-menu {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            visibility: hidden;
+            transition: .25s ease;
+            z-index: 30;
+        }
+
+        /* mostra o fundo qnd o menu abre */
+        .fundo-menu.aberto {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* configura o menu lateral */
+        .menu-lateral {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: min(320px, 85vw);
+            height: 100%;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            padding: 24px 18px;
+            z-index: 31;
+            transform: translateX(100%);
+            visibility: hidden;
+            transition: transform .25s ease, visibility .25s ease;
+            overflow-y: auto;
+        }
+
+        /* traz o menu pra dentro da tela */
+        .menu-lateral.aberto {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        /* organiza o titulo e o botao de fechar */
+        .menu-cabecalho {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        /* estiliza o titulo do menu */
+        .menu-cabecalho h2 {
+            font-size: 22px;
+            margin: 0;
+        }
+
+        /* estiliza o botao de fechar o menu */
+        .menu-cabecalho button {
+            width: 42px;
+            height: 42px;
+            border: none;
+            background: transparent;
+            color: #2D6A4F;
+            font-size: 25px;
+        }
+
+        /* organiza os links do menu */
+        .item-menu {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 14px 12px;
+            margin: 3px 0;
+            border: none;
+            border-radius: 9px;
+            background: transparent;
+            color: #2D6A4F;
+            text-align: left;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        /* define o tamanho dos icones do menu */
+        .item-menu i {
+            font-size: 20px;
+        }
+
+        /* destaca o link selecionado ou sob o mouse */
+        .item-menu:hover,
+        .item-menu.ativo {
+            background: #F5EFE0;
+            outline: 1px solid #2D6A4F;
+        }
+
+        /* cria a linha de separacao do menu */
+        .menu-separador {
+            height: 1px;
+            background: rgba(45, 106, 79, .25);
+            margin: 18px 8px;
+        }
+
+        /* limita a largura e centraliza o conteudo */
+        .content {
+            width: 100%;
+            max-width: 1360px;
+            margin: 0 auto;
+            padding: 30px 40px;
+        }
+
+        /* cria os paineis principais */
+        .panel {
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(245, 239, 224, .35);
+            border-radius: 14px;
+            background: rgba(245, 239, 224, .08);
+        }
+
+        /* organiza os titulos e os links de cada secao */
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 13px;
+        }
+
+        /* padroniza os titulos */
+        h2 {
+            margin: 0;
+            font-size: 17px;
+        }
+
+        /* estiliza os links de acesso rapido */
+        .text-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px;
+            color: #F5EFE0;
+            font-size: 12px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        /* mostra o estado vazio qnd nao ha dados */
+        .empty-state {
+            padding: 22px 15px;
+            border: 1px solid rgba(245, 239, 224, .35);
+            border-radius: 12px;
+            color: #F5EFE0;
+            text-align: center;
+        }
+
+        /* define o tamanho dos icones do estado vazio */
+        .empty-state > i {
+            color: #F5EFE0;
+            font-size: 27px;
+        }
+
+        /* destaca o titulo do estado vazio */
+        .empty-state strong {
+            display: block;
+            margin: 8px 0;
+            color: #F5EFE0;
+            font-size: 13px;
+        }
+
+        /* formata a descricao do estado vazio */
+        .empty-state p {
+            margin: 0;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* estiliza os cartoes com os dados do paciente */
+        .data-card {
+            padding: 15px;
+            border-radius: 12px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+        }
+
+        /* formata o titulo dos cartoes */
+        .data-card h3 {
+            margin: 0 0 7px;
+            font-size: 15px;
+        }
+
+        /* formata os textos dos cartoes */
+        .data-card p {
+            margin: 6px 0;
+            font-size: 12px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        /* transforma o cartao da dieta em um botao */
+        .dieta-card {
+            width: 100%;
+            display: block;
+            border: none;
+            text-align: left;
+            transition: transform .15s ease, box-shadow .15s ease;
+        }
+
+        /* movimenta o cartao qnd o mouse passa por cima */
+        .dieta-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 14px rgba(45, 106, 79, .25);
+        }
+
+        /* destaca os elementos qnd selecionados pelo teclado */
+        .dieta-card:focus-visible,
+        .botao-modal:focus-visible {
+            outline: 3px solid #2D6A4F;
+            outline-offset: 3px;
+        }
+
+        /* configura os avisos temporarios */
+        .toast {
+            display: none;
+            margin: 12px 20px 0;
+            padding: 12px;
+            border-radius: 9px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            font-size: 13px;
+        }
+
+        /* mostra o aviso qnd ele estiver ativo */
+        .toast.show {
+            display: block;
+        }
+
+        /* cria o fundo do modal */
+        .modal-fundo {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(45, 106, 79, .75);
+        }
+
+        /* esconde o modal qnd ele estiver fechado */
+        .modal-fundo[hidden] {
+            display: none;
+        }
+
+        /* configura a janela de detalhes da dieta */
+        .modal {
+            width: 100%;
+            max-width: 520px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border-radius: 14px;
+            padding: 22px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            box-shadow: 0 12px 40px rgba(45, 106, 79, .35);
+        }
+
+        /* organiza o titulo e o botao de fechar do modal */
+        .modal-cabecalho {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        /* formata o titulo do modal */
+        .modal-cabecalho h2 {
+            font-size: 19px;
+            line-height: 1.4;
+        }
+
+        /* configura o botao de fechar o modal */
+        .botao-modal {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(45, 106, 79, .1);
+            color: #2D6A4F;
+            font-size: 22px;
+        }
+
+        /* formata os paragrafos do modal */
+        .modal-conteudo p {
+            font-size: 14px;
+            line-height: 1.65;
+            overflow-wrap: anywhere;
+        }
+
+        /* separa os campos de informacao da dieta */
+        .modal-campo {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(45, 106, 79, .2);
+        }
+
+        /* remove a borda do ultimo campo */
+        .modal-campo:last-child {
+            border-bottom: none;
+        }
+
+        /* destaca o nome de cada campo */
+        .modal-campo strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 12px;
+        }
+
+        /* formata os valores de cada campo */
+        .modal-campo span {
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+        }
+
+        /* adapta a pagina pra telas menores */
+        @media (max-width: 700px) {
+            .topbar {
+                height: 76px;
+                padding: 0 20px;
+            }
+
+            .topbar-logo img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .content {
+                padding: 24px 18px;
+            }
+        }
+
+        /* ajusta os espacamentos em celulares pequenos */
+        @media (max-width: 380px) {
+            .content {
+                padding: 20px 12px;
+            }
+
+            .section-heading {
+                align-items: flex-start;
+            }
+
+            .text-button {
+                font-size: 11px;
+            }
+        }
+
+        /* alinha os dados da proxima consulta */
+        #resumoConsulta .data-card {
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <!-- mostra mensagens de aviso da pagina -->
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+        <!-- barra superior com logo e botao do menu -->
+        <header class="topbar">
+            <div></div>
+            <a href="/dashboard.html" class="topbar-logo" aria-label="Quiri — Início">
+                <img src="/imagens/logoquiri.png" alt="logo quiri">
+            </a>
+            <button class="botao-menu" id="abrirMenu" type="button"
+                    aria-label="Abrir menu" aria-expanded="false"
+                    aria-controls="menuLateral">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </header>
+
+        <!-- fundo q aparece atras do menu lateral -->
+        <div class="fundo-menu" id="fundoMenu"></div>
+
+        <!-- menu lateral com os links das paginas -->
+        <aside class="menu-lateral" id="menuLateral" aria-hidden="true">
+            <div class="menu-cabecalho">
+                <h2>MENU</h2>
+                <button type="button" id="fecharMenu" aria-label="Fechar menu">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+
+            <!-- links principais de navegacao -->
+            <a class="item-menu ativo" href="/dashboard.html"><i class="ti ti-home"></i> Início</a>
+            <a class="item-menu" href="/dietas.html"><i class="ti ti-salad"></i> Dietas</a>
+            <a class="item-menu" href="/consultas.html"><i class="ti ti-calendar"></i> Consultas</a>
+            <a class="item-menu" href="/leitor.html"><i class="ti ti-barcode"></i> Leitor de Codigo de Barras</a>
+
+            <!-- separa os links principais dos links da conta -->
+            <div class="menu-separador"></div>
+
+            <!-- links de perfil e saida da conta -->
+            <a class="item-menu" href="/perfil.html"><i class="ti ti-user-circle"></i> Meu perfil</a>
+            <a class="item-menu" href="/login.html" id="btnSairMenu"><i class="ti ti-logout"></i> Sair da conta</a>
+        </aside>
+
+        <!-- conteudo principal do dashboard -->
+        <main class="content">
+            <!-- secao q mostra a dieta atual -->
+            <section class="panel">
+                <div class="section-heading">
+                    <h2>Dieta atual</h2>
+                    <a class="text-button" href="/dietas.html">
+                        Ver dieta <i class="ti ti-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- os dados da dieta sao inseridos pelo javascript -->
+                <div id="resumoDieta" class="empty-state">
+                    <i class="ti ti-bowl-spoon"></i>
+                    <strong>Sua dieta irá aparecer aqui</strong>
+                </div>
+            </section>
+
+            <!-- secao q mostra a proxima consulta -->
+            <section class="panel">
+                <div class="section-heading">
+                    <h2>Próxima consulta</h2>
+                    <a class="text-button" href="/consultas.html">
+                        Ver consultas <i class="ti ti-arrow-right"></i>
+                    </a>
+                </div>
+
+                <!-- os dados da consulta sao inseridos pelo javascript -->
+                <div id="resumoConsulta" class="empty-state">
+                    <i class="ti ti-calendar"></i>
+                    <strong>Suas consultas aparecerão aqui</strong>
+                    <p>Seus próximos atendimentos serão exibidos nesta área.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- janela q mostra os detalhes da dieta selecionada -->
+    <div class="modal-fundo" id="modalFundo" hidden>
+        <section class="modal" role="dialog" aria-modal="true"
+                 aria-labelledby="modalTitulo" aria-describedby="modalDescricao">
+            <div class="modal-cabecalho">
+                <h2 id="modalTitulo">Detalhes da dieta</h2>
+                <button type="button" class="botao-modal" id="fecharModal"
+                        aria-label="Fechar detalhes">&times;</button>
+            </div>
+
+            <!-- os detalhes da dieta sao criados pelo javascript -->
+            <div class="modal-conteudo" id="modalDescricao"></div>
+        </section>
+    </div>
+
+    <script>
+        // cria um atalho pra buscar elementos pelo id
+        const $ = id => document.getElementById(id);
+
+        // recupera o id do paciente salvo no navegador
+        const uidPaciente = localStorage.getItem("uidPaciente");
+
+        // mostra um aviso temporario na tela
+        function mostrarToast(texto) {
+            const toast = $("toast");
+            toast.textContent = texto;
+            toast.classList.add("show");
+            setTimeout(() => toast.classList.remove("show"), 3500);
+        }
+
+        // pega os elementos usados pelo menu lateral
+        const menu = $("menuLateral");
+        const fundoMenu = $("fundoMenu");
+        const botaoAbrirMenu = $("abrirMenu");
+
+        // abre o menu e atualiza os atributos de acessibilidade
+        function mostrarMenu() {
+            menu.classList.add("aberto");
+            fundoMenu.classList.add("aberto");
+            menu.setAttribute("aria-hidden", "false");
+            botaoAbrirMenu.setAttribute("aria-expanded", "true");
+            document.body.classList.add("menu-aberto");
+            $("fecharMenu").focus();
+        }
+
+        // fecha o menu e libera a rolagem da pagina
+        function esconderMenu() {
+            menu.classList.remove("aberto");
+            fundoMenu.classList.remove("aberto");
+            menu.setAttribute("aria-hidden", "true");
+            botaoAbrirMenu.setAttribute("aria-expanded", "false");
+            document.body.classList.remove("menu-aberto");
+        }
+
+        // liga os botoes e o fundo as funcoes do menu
+        botaoAbrirMenu.addEventListener("click", mostrarMenu);
+        $("fecharMenu").addEventListener("click", esconderMenu);
+        fundoMenu.addEventListener("click", esconderMenu);
+
+        // remove a sessao local qnd o paciente sai da conta
+        $("btnSairMenu").addEventListener("click", () => {
+            localStorage.removeItem("uidPaciente");
+        });
+
+        // converte diferentes formatos de data em um objeto date
+        function paraData(valor) {
+            if (!valor) return null;
+
+            // trata datas recebidas como timestamp do firebase
+            if (typeof valor.toDate === "function") {
+                return valor.toDate();
+            }
+
+            // trata timestamps recebidos como objetos comuns
+            if (typeof valor === "object" &&
+                (valor.seconds !== undefined || valor._seconds !== undefined)) {
+                return new Date((valor.seconds ?? valor._seconds) * 1000);
+            }
+
+            // tenta converter outros formatos de data
+            const data = new Date(valor);
+            return Number.isNaN(data.getTime()) ? null : data;
+        }
+
+        // transforma uma data em formato brasileiro
+        function formatarData(valor) {
+            const data = paraData(valor);
+            return data ? data.toLocaleDateString("pt-BR") : "Não informada";
+        }
+
+        // recupera a data e o horario de uma consulta
+        function dataHoraConsulta(consulta) {
+            return paraData(consulta.dataehoras);
+        }
+
+        // cria uma mensagem padrao qnd nao existem dados
+        function mostrarVazio(elemento, icone, titulo, descricao = "") {
+            const estado = document.createElement("div");
+            estado.className = "empty-state";
+
+            // cria o icone da mensagem
+            const imagem = document.createElement("i");
+            imagem.className = `ti ${icone}`;
+
+            // cria o titulo da mensagem
+            const texto = document.createElement("strong");
+            texto.textContent = titulo;
+
+            // adiciona os elementos principais
+            estado.append(imagem, texto);
+
+            // adiciona a descricao se ela existir
+            if (descricao) {
+                const detalhe = document.createElement("p");
+                detalhe.textContent = descricao;
+                estado.append(detalhe);
+            }
+
+            // substitui o conteudo antigo pela mensagem
+            $(elemento).replaceChildren(estado);
+        }
+
+        // mostra uma mensagem qnd nao existe dieta vigente
+        function dietaVazia() {
+            mostrarVazio(
+                "resumoDieta",
+                "ti-bowl-spoon",
+                "Nenhuma dieta",
+                "A dieta irá aparecer aqui."
+            );
+        }
+
+        // mostra uma mensagem qnd nao existe consulta futura
+        function consultaVazia() {
+            mostrarVazio(
+                "resumoConsulta",
+                "ti-calendar",
+                "Nenhuma consulta",
+                "A próxima consulta irá aparecer aqui."
+            );
+        }
+
+        // cria um campo com titulo e valor dentro do modal
+        function criarCampoModal(rotulo, valor) {
+            const campo = document.createElement("div");
+            campo.className = "modal-campo";
+
+            // cria o nome do campo
+            const titulo = document.createElement("strong");
+            titulo.textContent = rotulo;
+
+            // cria o valor do campo
+            const texto = document.createElement("span");
+            texto.textContent = valor || "Não informado";
+
+            // junta o titulo e o valor
+            campo.append(titulo, texto);
+            return campo;
+        }
+
+        // preenche e abre o modal com os dados da dieta
+        function abrirModalDieta(dieta) {
+            $("modalTitulo").textContent = dieta.titulo || "Plano alimentar";
+
+            $("modalDescricao").replaceChildren(
+                criarCampoModal("Descrição", dieta.descricao),
+                criarCampoModal("Data de inicio", formatarData(dieta.data_inicio)),
+                criarCampoModal("Data de termino", formatarData(dieta.data_fim))
+            );
+
+            // exibe o modal e impede a rolagem do fundo
+            $("modalFundo").hidden = false;
+            document.body.classList.add("modal-aberto");
+            $("fecharModal").focus();
+        }
+
+        // fecha o modal e libera a rolagem da pagina
+        function fecharModal() {
+            $("modalFundo").hidden = true;
+            document.body.classList.remove("modal-aberto");
+        }
+
+        // fecha o modal pelo botao
+        $("fecharModal").addEventListener("click", fecharModal);
+
+        // fecha o modal qnd o clique ocorre fora da janela
+        $("modalFundo").addEventListener("click", evento => {
+            if (evento.target === $("modalFundo")) fecharModal();
+        });
+
+        // permite fechar o menu ou o modal usando esc
+        document.addEventListener("keydown", evento => {
+            if (evento.key === "Escape") {
+                esconderMenu();
+
+                if (!$("modalFundo").hidden) {
+                    fecharModal();
+                }
+            }
+        });
+
+        // seleciona a dieta q ainda esta vigente
+        function selecionarDieta(dietas) {
+            const agora = new Date();
+
+            return dietas
+                .filter(dieta => {
+                    const fim = paraData(dieta.data_fim);
+                    return !fim || fim >= agora;
+                })
+                .sort((a, b) => {
+                    const inicioA = paraData(a.data_inicio)?.getTime() || 0;
+                    const inicioB = paraData(b.data_inicio)?.getTime() || 0;
+                    return inicioB - inicioA;
+                })[0] || null;
+        }
+
+        // monta o cartao da dieta na tela
+        function exibirDieta(dieta) {
+            const card = document.createElement("button");
+            card.type = "button";
+            card.className = "data-card dieta-card";
+            card.setAttribute(
+                "aria-label",
+                `Ver detalhes da dieta ${dieta.titulo || "Plano alimentar"}`
+            );
+
+            // adiciona o titulo da dieta
+            const titulo = document.createElement("h3");
+            titulo.textContent = dieta.titulo || "Plano alimentar";
+
+            // adiciona a descricao da dieta
+            const descricao = document.createElement("p");
+            descricao.textContent = dieta.descricao || "Consulte os detalhes da sua dieta.";
+
+            // adiciona a data de inicio
+            const inicio = document.createElement("p");
+            inicio.textContent = `Inicio: ${formatarData(dieta.data_inicio)}`;
+
+            // adiciona a data de termino
+            const fim = document.createElement("p");
+            fim.textContent = `Termino: ${formatarData(dieta.data_fim)}`;
+
+            // junta os dados e abre o modal ao clicar
+            card.append(titulo, descricao, inicio, fim);
+            card.addEventListener("click", () => abrirModalDieta(dieta));
+
+            // atualiza a secao da dieta
+            $("resumoDieta").replaceChildren(card);
+        }
+
+        // seleciona a consulta futura mais proxima
+        function selecionarConsulta(consultas) {
+            const agora = new Date();
+
+            return consultas
+                .map(consulta => ({
+                    consulta,
+                    dataHora: dataHoraConsulta(consulta)
+                }))
+                .filter(item => item.dataHora && item.dataHora >= agora)
+                .sort((a, b) => a.dataHora - b.dataHora)[0] || null;
+        }
+
+        // monta o cartao com os dados da proxima consulta
+        function exibirConsulta(consulta, dataHora) {
+            const card = document.createElement("article");
+            card.className = "data-card";
+
+            // adiciona o titulo do cartao
+            const titulo = document.createElement("h3");
+            titulo.textContent = "Próxima consulta";
+
+            // mostra a data do atendimento
+            const data = document.createElement("p");
+            data.textContent = `Data: ${dataHora.toLocaleDateString("pt-BR")}`;
+
+            // mostra o horario do atendimento
+            const horario = document.createElement("p");
+            horario.textContent = `Horário: ${dataHora.toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit"
+            })}`;
+
+            // junta os dados e atualiza a secao
+            card.append(titulo, data, horario);
+            $("resumoConsulta").replaceChildren(card);
+        }
+
+        // busca os dados do paciente na api
+        async function carregarDashboard() {
+            // verifica se existe uma sessao salva
+            if (!uidPaciente) {
+                mostrarToast("Sessão não encontrada. Entre novamente pelo login.");
+                return;
+            }
+
+            try {
+                // solicita as dietas e consultas do paciente
+                const resposta = await fetch("/api/paciente/dashboard", {
+                    headers: { "x-paciente-uid": uidPaciente }
+                });
+
+                // converte a resposta da api em json
+                const dados = await resposta.json();
+
+                // trata erros retornados pelo servidor
+                if (!resposta.ok) {
+                    throw new Error(dados.mensagem || "Não foi possível carregar os dados.");
+                }
+
+                // garante q os dados recebidos sejam listas
+                const dietas = Array.isArray(dados.dietas) ? dados.dietas : [];
+                const consultas = Array.isArray(dados.consultas) ? dados.consultas : [];
+
+                // carrega a dieta vigente ou mostra o estado vazio
+                const dieta = selecionarDieta(dietas);
+                dieta ? exibirDieta(dieta) : dietaVazia();
+
+                // carrega a proxima consulta ou mostra o estado vazio
+                const proxima = selecionarConsulta(consultas);
+                proxima
+                    ? exibirConsulta(proxima.consulta, proxima.dataHora)
+                    : consultaVazia();
+
+            } catch (erro) {
+                // registra o erro e mostra um aviso na tela
+                console.error("Erro ao carregar dashboard:", erro);
+                mostrarToast(erro.message || "Erro ao carregar os dados.");
+            }
+        }
+
+        // inicia o carregamento do dashboard
+        carregarDashboard();
+    </script>
+</body>
+</html>

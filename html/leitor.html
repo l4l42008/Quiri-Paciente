@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiri — Leitor</title>
+
+    <!-- carrega os icones -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    
+    <!-- carrega a biblioteca de leitura de codigo de barras -->
+    <script src="https://unpkg.com/@zxing/browser@0.2.1"></script>
+    <style>
+        /* reseta os espacamentos padrao */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* define o estilo geral da pagina */
+        body {
+            margin: 0;
+            background: #2D6A4F;
+            color: #F5EFE0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* impede a rolagem qnd o menu esta aberto */
+        body.menu-aberto {
+            overflow: hidden;
+        }
+
+        /* padroniza a fonte dos botoes e campos */
+        button,
+        input {
+            font: inherit;
+        }
+
+        /* define o cursor dos botoes */
+        button {
+            cursor: pointer;
+        }
+
+        /* organiza a barra superior da pagina */
+        .topbar {
+            height: 108px;
+            background: #F5EFE0;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            padding: 0 40px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* organiza a logo da barra superior */
+        .topbar-logo {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ajusta o tamanho da imagem da logo */
+        .topbar-logo img {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+        }
+
+        /* define o estilo do botao do menu */
+        .botao-menu {
+            grid-column: 3;
+            justify-self: end;
+            width: 46px;
+            height: 46px;
+            border: 0;
+            border-radius: 8px;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* define o estilo das linhas do menu */
+        .botao-menu span {
+            width: 24px;
+            height: 2.5px;
+            background: #2D6A4F;
+            border-radius: 3px;
+        }
+
+        /* define o fundo escuro do menu lateral */
+        .fundo-menu {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            background: rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            visibility: hidden;
+            transition: .25s;
+        }
+
+        /* mostra o fundo qnd o menu esta aberto */
+        .fundo-menu.aberto {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* define o estilo do menu lateral */
+        .menu-lateral {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: min(320px, 85vw);
+            height: 100%;
+            padding: 24px 18px;
+            overflow-y: auto;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            z-index: 31;
+            transform: translateX(100%);
+            visibility: hidden;
+            transition: .25s;
+        }
+
+        /* mostra o menu lateral qnd ele esta aberto */
+        .menu-lateral.aberto {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        /* organiza o cabecalho do menu */
+        .menu-cabecalho {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        /* define o estilo do titulo do menu */
+        .menu-cabecalho h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        /* define o estilo do botao de fechar o menu */
+        .menu-cabecalho button {
+            border: 0;
+            background: transparent;
+            color: #2D6A4F;
+            font-size: 25px;
+        }
+
+        /* organiza os itens do menu lateral */
+        .item-menu {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 14px 12px;
+            margin: 3px 0;
+            border: 0;
+            border-radius: 9px;
+            background: transparent;
+            color: #2D6A4F;
+            text-align: left;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        /* define o tamanho dos icones do menu */
+        .item-menu i {
+            font-size: 20px;
+        }
+
+        /* destaca o item do menu ao passar o mouse ou qnd esta ativo */
+        .item-menu:hover,
+        .item-menu.ativo {
+            background: rgba(45, 106, 79, .15);
+        }
+
+        /* define o estilo do separador do menu */
+        .menu-separador {
+            height: 1px;
+            background: rgba(45, 106, 79, .2);
+            margin: 18px 8px;
+        }
+
+        /* organiza o conteudo principal da pagina */
+        .content {
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+            padding: 36px 24px;
+        }
+
+        /* define o estilo do titulo da pagina */
+        .titulo {
+            margin: 0 0 10px;
+            font-size: 27px;
+        }
+
+        /* define o estilo do subtitulo da pagina */
+        .subtitulo {
+            color: #F5EFE0;
+            font-size: 14px;
+            line-height: 1.6;
+            margin: 0 0 26px;
+        }
+
+        /* define o estilo do painel de busca */
+        .painel {
+            padding: 24px;
+            border: 1px solid rgba(245, 239, 224, .2);
+            border-radius: 15px;
+            background: rgba(245, 239, 224, .05);
+        }
+
+        /* define o estilo do titulo do painel */
+        .painel h2 {
+            margin: 0 0 12px;
+            font-size: 18px;
+        }
+
+        /* define o estilo do texto de descricao */
+        .descricao {
+            color: #F5EFE0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* organiza o campo de busca e o botao */
+        .campo-busca {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* define o estilo do campo de codigo de barras */
+        .campo-busca input {
+            width: 100%;
+            min-width: 0;
+            padding: 14px;
+            border: 1px solid rgba(45, 106, 79, .25);
+            border-radius: 9px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+        }
+
+        /* define o estilo dos botoes */
+        .botao {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 13px 18px;
+            border: 0;
+            border-radius: 9px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            font-weight: bold;
+        }
+
+        /* indica qnd o botao esta desativado */
+        .botao:disabled {
+            opacity: .6;
+            cursor: wait;
+        }
+
+        /* define o estilo do botao secundario */
+        .botao-secundario {
+            border: 1px solid rgba(245, 239, 224, .2);
+            background: transparent;
+            color: #F5EFE0;
+        }
+
+        /* esconde a area da camera inicialmente */
+        .camera-area {
+            display: none;
+            margin-top: 20px;
+        }
+
+        /* mostra a area da camera qnd necessario */
+        .camera-area.visivel {
+            display: block;
+        }
+
+        /* define o estilo da imagem da camera */
+        .camera-video {
+            width: 100%;
+            max-height: 380px;
+            background: #2D6A4F;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        /* organiza os botoes da camera */
+        .camera-acoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        /* define o estilo do status da camera */
+        .camera-status {
+            color: #F5EFE0;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+
+        /* define o estilo da mensagem de retorno */
+        .mensagem {
+            display: none;
+            margin-top: 16px;
+            padding: 13px;
+            border-radius: 9px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* mostra a mensagem qnd necessario */
+        .mensagem.visivel {
+            display: block;
+        }
+
+        /* define o estilo do texto do rodape */
+        .rodape {
+            margin-top: 20px;
+            color: #F5EFE0;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        /* ajusta a pagina pra telas menores */
+        @media (max-width: 600px) {
+            /* ajusta a barra superior em telas menores */
+            .topbar {
+                height: 76px;
+                padding: 0 20px;
+            }
+
+            /* diminui a logo em telas menores */
+            .topbar-logo img {
+                width: 48px;
+                height: 48px;
+            }
+
+            /* ajusta o espaco do conteudo em telas menores */
+            .content {
+                padding: 25px 16px;
+            }
+
+            /* ajusta o espaco do painel em telas menores */
+            .painel {
+                padding: 18px;
+            }
+
+            /* organiza o campo de busca em telas menores */
+            .campo-busca {
+                flex-direction: column;
+            }
+
+            /* ajusta o botao de busca em telas menores */
+            .campo-busca .botao {
+                width: 100%;
+            }
+
+            /* organiza os botoes da camera em telas menores */
+            .camera-acoes {
+                flex-direction: column;
+            }
+
+            /* ajusta os botoes da camera em telas menores */
+            .camera-acoes .botao {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- organiza a barra superior da pagina -->
+    <header class="topbar">
+        <div></div>
+        <!-- cria o link da logo pra pagina inicial -->
+        <a href="/dashboard.html" class="topbar-logo" aria-label="Quiri - Início">
+            <img src="/imagens/logoquiri.png" alt="Logo Quiri">
+        </a>
+        <!-- cria o botao pra abrir o menu lateral -->
+        <button class="botao-menu" id="abrirMenu" type="button" aria-label="Abrir menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </header>
+
+    <!-- define o fundo do menu lateral -->
+    <div class="fundo-menu" id="fundoMenu"></div>
+
+    <!-- organiza o menu lateral -->
+    <aside class="menu-lateral" id="menuLateral" aria-hidden="true">
+        <!-- organiza o cabecalho do menu -->
+        <div class="menu-cabecalho">
+            <h2>MENU</h2>
+            <!-- cria o botao pra fechar o menu -->
+            <button type="button" id="fecharMenu" aria-label="Fechar menu"><i class="ti ti-x"></i></button>
+        </div>
+        <!-- cria o link pra pagina inicial -->
+        <a class="item-menu" href="/dashboard.html"><i class="ti ti-home"></i> Início</a>
+        <!-- cria o link pra pagina de dietas -->
+        <a class="item-menu" href="/dietas.html"><i class="ti ti-salad"></i> Dietas</a>
+        <!-- cria o link pra pagina de consultas -->
+        <a class="item-menu" href="/consultas.html"><i class="ti ti-calendar"></i> Consultas</a>
+        <!-- cria o link pra pagina do leitor de codigo de barras -->
+        <a class="item-menu ativo" href="/leitor.html"><i class="ti ti-barcode"></i> Leitor de código de barras</a>
+        <!-- separa os links principais das opcoes da conta -->
+        <div class="menu-separador"></div>
+        <!-- cria o link pra pagina de perfil -->
+        <a class="item-menu" href="/perfil.html"><i class="ti ti-user-circle"></i> Meu perfil</a>
+        <!-- cria o botao pra sair da conta -->
+        <a class="item-menu" href="/login.html" id="btnSair"><i class="ti ti-logout"></i> Sair da conta</a>
+    </aside>
+
+    <!-- organiza o conteudo principal da pagina -->
+    <main class="content">
+        <h1 class="titulo">LEITOR DE ALIMENTOS</h1>
+        <p class="subtitulo">Escaneie o código de barras ou digite o número para consultar as informações do alimento.</p>
+
+        <!-- organiza o painel de busca do produto -->
+        <section class="painel">
+            <h2><i class="ti ti-barcode"></i> Buscar produto</h2>
+            <p class="descricao">Aponte a câmera para o código de barras da embalagem ou digite o número manualmente</p>
+
+            <!-- organiza os botoes de controle da camera -->
+            <div class="camera-acoes">
+                <button class="botao" id="btnAbrirCamera" type="button">
+                    <i class="ti ti-camera"></i> Abrir câmera
+                </button>
+                <button class="botao botao-secundario" id="btnFecharCamera" type="button" hidden>
+                    <i class="ti ti-camera-off"></i> Fechar câmera
+                </button>
+            </div>
+
+            <!-- mostra a imagem da camera qnd ela estiver ativa -->
+            <div class="camera-area" id="cameraArea">
+                <video class="camera-video" id="cameraVideo" muted playsinline></video>
+                <p class="camera-status" id="cameraStatus">Posicione o código de barras dentro da imagem.</p>
+            </div>
+
+            <!-- cria o formulario de busca do produto -->
+            <form id="formBusca">
+                <div class="campo-busca">
+                    <input id="codigoBarras" type="text" inputmode="numeric" autocomplete="off" placeholder="Digite o código de barras" aria-label="Código de barras" required>
+                    <button class="botao" id="btnBuscar" type="submit"><i class="ti ti-search"></i> Buscar</button>
+                </div>
+            </form>
+
+            <!-- mostra as mensagens de retorno da busca -->
+            <div class="mensagem" id="mensagem" role="status" aria-live="polite"></div>
+            <p class="rodape">Fonte: Open Food Facts. As informações são colaborativas e podem estar incompletas ou desatualizadas. As classificações são indicadores informativos e não substituem a leitura da embalagem nem a orientação de um nutricionista.</p>
+        </section>
+    </main>
+
+    <script>
+        // facilita a busca de elementos pelo id
+        const $ = id => document.getElementById(id);
+        const menu = $("menuLateral");
+        const fundoMenu = $("fundoMenu");
+        const botaoAbrir = $("abrirMenu");
+        const video = $("cameraVideo");
+        const cameraArea = $("cameraArea");
+        const cameraStatus = $("cameraStatus");
+        let leitor = null;
+        let controlesCamera = null;
+        let buscando = false;
+
+        // abre o menu lateral e atualiza os estados de acessibilidade
+        function abrirMenu() {
+            menu.classList.add("aberto");
+            fundoMenu.classList.add("aberto");
+            menu.setAttribute("aria-hidden", "false");
+            botaoAbrir.setAttribute("aria-expanded", "true");
+            document.body.classList.add("menu-aberto");
+            $("fecharMenu").focus();
+        }
+
+        // fecha o menu lateral e atualiza os estados de acessibilidade
+        function fecharMenu() {
+            menu.classList.remove("aberto");
+            fundoMenu.classList.remove("aberto");
+            menu.setAttribute("aria-hidden", "true");
+            botaoAbrir.setAttribute("aria-expanded", "false");
+            document.body.classList.remove("menu-aberto");
+        }
+
+        // controla a abertura e o fechamento do menu
+        botaoAbrir.addEventListener("click", abrirMenu);
+        $("fecharMenu").addEventListener("click", fecharMenu);
+        fundoMenu.addEventListener("click", fecharMenu);
+
+        // fecha o menu e a camera ao pressionar esc
+        document.addEventListener("keydown", evento => {
+            if (evento.key === "Escape") {
+                fecharMenu();
+                pararCamera();
+            }
+        });
+
+        // remove o id do paciente ao sair da conta
+        $("btnSair").addEventListener("click", () => {
+            localStorage.removeItem("uidPaciente");
+        });
+
+        // mostra uma mensagem na pagina
+        function mostrarMensagem(texto) {
+            $("mensagem").textContent = texto;
+            $("mensagem").classList.add("visivel");
+        }
+
+        // limpa a mensagem exibida na pagina
+        function limparMensagem() {
+            $("mensagem").textContent = "";
+            $("mensagem").classList.remove("visivel");
+        }
+
+        // encerra a leitura e libera os recursos da camera
+        function pararCamera() {
+            if (controlesCamera) {
+                controlesCamera.stop();
+                controlesCamera = null;
+            }
+
+            if (video.srcObject) {
+                video.srcObject.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+            }
+
+            cameraArea.classList.remove("visivel");
+            $("btnFecharCamera").hidden = true;
+            $("btnAbrirCamera").disabled = false;
+        }
+
+        // inicia a camera e configura a leitura do codigo de barras
+        async function iniciarCamera() {
+            limparMensagem();
+
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                mostrarMensagem("Seu navegador não permite acessar a câmera neste endereço. Use localhost ou acesse o site por HTTPS.");
+                return;
+            }
+
+            if (typeof ZXingBrowser === "undefined") {
+                mostrarMensagem("Não foi possível carregar o leitor de código de barras. Verifique sua conexão e recarregue a página.");
+                return;
+            }
+
+            $("btnAbrirCamera").disabled = true;
+            cameraArea.classList.add("visivel");
+            $("btnFecharCamera").hidden = false;
+            cameraStatus.textContent = "Solicitando acesso à câmera...";
+
+            try {
+                leitor = new ZXingBrowser.BrowserMultiFormatReader();
+
+                controlesCamera = await leitor.decodeFromVideoDevice(
+                    undefined,
+                    video,
+                    async (resultado, erro, controles) => {
+                        if (!resultado || buscando) return;
+
+                        const codigo = resultado.getText().trim();
+
+                        if (!/^\d{8,14}$/.test(codigo)) {
+                            cameraStatus.textContent = "Código detectado, mas não parece ser um código de barras válido.";
+                            return;
+                        }
+
+                        buscando = true;
+                        $("codigoBarras").value = codigo;
+                        cameraStatus.textContent = "Código lido: " + codigo + ". Buscando produto...";
+                        pararCamera();
+                        await buscarProduto(codigo);
+                    }
+                );
+
+                cameraStatus.textContent = "Câmera ativa. Posicione o código de barras dentro da imagem.";
+            } catch (erro) {
+                pararCamera();
+
+                if (erro.name === "NotAllowedError" || erro.name === "PermissionDeniedError") {
+                    mostrarMensagem("Acesso à câmera negado. Permita o uso da câmera nas configurações do navegador e tente novamente.");
+                } else if (erro.name === "NotFoundError" || erro.name === "DevicesNotFoundError") {
+                    mostrarMensagem("Nenhuma câmera foi encontrada neste dispositivo.");
+                } else {
+                    mostrarMensagem("Não foi possível iniciar a câmera. Confira as permissões do navegador e tente novamente.");
+                }
+
+                cameraStatus.textContent = "";
+            }
+        }
+
+        // valida o codigo de barras e busca os dados do produto
+        async function buscarProduto(codigoInformado) {
+            const codigo = (codigoInformado || $("codigoBarras").value).trim();
+
+            if (!/^\d{8,14}$/.test(codigo)) {
+                buscando = false;
+                mostrarMensagem("Digite ou leia um código de barras válido com 8 a 14 dígitos.");
+                return;
+            }
+
+            const botao = $("btnBuscar");
+            botao.disabled = true;
+            botao.innerHTML = '<i class="ti ti-loader"></i> Buscando...';
+            limparMensagem();
+
+            try {
+                const resposta = await fetch(
+                    `https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(codigo)}.json`
+                );
+
+                if (!resposta.ok) {
+                    throw new Error("Não foi possível acessar a base de alimentos. Tente novamente.");
+                }
+
+                const dados = await resposta.json();
+
+                if (dados.status !== 1 || !dados.product) {
+                    throw new Error("Produto não encontrado. Confira o código de barras e tente novamente.");
+                }
+
+                sessionStorage.setItem("produtoQuiri", JSON.stringify(dados.product));
+                window.location.href = "/produto.html";
+            } catch (erro) {
+                mostrarMensagem(erro.message || "Ocorreu um erro ao buscar o produto.");
+            } finally {
+                botao.disabled = false;
+                botao.innerHTML = '<i class="ti ti-search"></i> Buscar';
+                buscando = false;
+            }
+        }
+
+        // configura os botoes e o formulario de busca
+        $("btnAbrirCamera").addEventListener("click", iniciarCamera);
+        $("btnFecharCamera").addEventListener("click", pararCamera);
+
+        // impede o envio padrao do formulario e busca o produto
+        $("formBusca").addEventListener("submit", async evento => {
+            evento.preventDefault();
+            await buscarProduto();
+        });
+
+        // encerra a camera qnd a pagina e fechada
+        window.addEventListener("pagehide", pararCamera);
+    </script>
+</body>
+</html>

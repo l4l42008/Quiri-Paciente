@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiri — Produto</title>
+
+    <!-- carrega os icones -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+    <style>
+        /* reseta os espacamentos padrao */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* define o estilo geral da pagina */
+        body {
+            margin: 0;
+            background: #2D6A4F;
+            color: #F5EFE0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* impede a rolagem qnd o menu esta aberto */
+        body.menu-aberto {
+            overflow: hidden;
+        }
+
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* organiza a barra superior */
+        .topbar {
+            position: relative;
+            z-index: 10;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            height: 108px;
+            padding: 0 40px;
+            background: #F5EFE0;
+        }
+
+        /* organiza a logo */
+        .topbar-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 64px;
+            height: 64px;
+        }
+
+        .topbar-logo img {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+        }
+
+        /* define o estilo do botao do menu */
+        .botao-menu {
+            grid-column: 3;
+            justify-self: end;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            width: 46px;
+            height: 46px;
+            border: 0;
+            border-radius: 8px;
+            background: transparent;
+        }
+
+        .botao-menu:hover {
+            background: rgba(45, 106, 79, .08);
+        }
+
+        .botao-menu span {
+            width: 24px;
+            height: 2.5px;
+            border-radius: 3px;
+            background: #2D6A4F;
+        }
+
+        /* define o fundo do menu lateral */
+        .fundo-menu {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            background: rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            visibility: hidden;
+            transition: .25s;
+        }
+
+        /* mostra o fundo qnd o menu esta aberto */
+        .fundo-menu.aberto {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* define o estilo do menu lateral */
+        .menu-lateral {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 31;
+            width: min(320px, 85vw);
+            height: 100%;
+            padding: 24px 18px;
+            overflow-y: auto;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            transform: translateX(100%);
+            visibility: hidden;
+            transition: .25s;
+        }
+
+        /* mostra o menu lateral qnd ele esta aberto */
+        .menu-lateral.aberto {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        /* organiza o cabecalho do menu */
+        .menu-cabecalho {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        .menu-cabecalho h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        /* define o estilo do botao de fechar o menu */
+        .menu-cabecalho button {
+            border: 0;
+            background: transparent;
+            color: #2D6A4F;
+            font-size: 25px;
+        }
+
+        /* define o estilo dos links do menu */
+        .item-menu {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            width: 100%;
+            padding: 14px 12px;
+            margin: 3px 0;
+            border: 0;
+            border-radius: 9px;
+            background: transparent;
+            color: #2D6A4F;
+            text-align: left;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .item-menu i {
+            font-size: 20px;
+        }
+
+        /* destaca o item selecionado ou qnd passa o mouse */
+        .item-menu:hover,
+        .item-menu.ativo {
+            background: rgba(45, 106, 79, .12);
+        }
+
+        /* define o estilo do separador do menu */
+        .menu-separador {
+            height: 1px;
+            margin: 18px 8px;
+            background: rgba(45, 106, 79, .18);
+        }
+
+        /* organiza o conteudo principal da pagina */
+        .content {
+            width: 100%;
+            max-width: 1100px;
+            padding: 34px 24px;
+            margin: 0 auto;
+        }
+
+        /* define o estilo do titulo da pagina */
+        .titulo {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        /* define o estilo do texto de apoio */
+        .subtitulo {
+            margin: 0 0 24px;
+            color: rgba(245, 239, 224, .75);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* define o estilo do painel principal */
+        .painel {
+            padding: 24px;
+            border: 1px solid rgba(245, 239, 224, .2);
+            border-radius: 15px;
+            background: rgba(245, 239, 224, .04);
+        }
+
+        /* organiza o cabecalho do produto */
+        .produto-topo {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 28px;
+        }
+
+        /* define o estilo da imagem do produto */
+        .produto-imagem {
+            flex-shrink: 0;
+            width: 160px;
+            height: 160px;
+            border-radius: 12px;
+            background: #F5EFE0;
+            object-fit: contain;
+        }
+
+        /* define o estilo do nome do produto */
+        .produto-nome {
+            margin: 0 0 10px;
+            font-size: 25px;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+
+        /* define o estilo das informacoes complementares */
+        .marca,
+        .codigo {
+            margin: 7px 0;
+            color: rgba(245, 239, 224, .75);
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        /* define o estilo dos titulos das secoes */
+        .secao-titulo {
+            margin: 28px 0 14px;
+            font-size: 19px;
+        }
+
+        /* organiza os cartoes de classificacao */
+        .classificacoes {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin: 18px 0 28px;
+        }
+
+        /* define o estilo dos cartoes de classificacao */
+        .classificacao {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            min-height: 96px;
+            padding: 15px;
+            border-radius: 11px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+        }
+
+        .classificacao.nutri {
+            background: #F5EFE0;
+        }
+
+        .classificacao.nova {
+            background: rgba(245, 239, 224, .92);
+        }
+
+        .classificacao.eco {
+            background: rgba(245, 239, 224, .84);
+        }
+
+        /* define o estilo do simbolo da classificacao */
+        .simbolo {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 54px;
+            height: 54px;
+            border: 2px solid rgba(45, 106, 79, .2);
+            border-radius: 10px;
+            background: #2D6A4F;
+            color: #F5EFE0;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        /* define o estilo das classificacoes nutri-score */
+        .simbolo.nutri-a,
+        .simbolo.nutri-b,
+        .simbolo.nutri-c,
+        .simbolo.nutri-d,
+        .simbolo.nutri-e {
+            background: #2D6A4F;
+            color: #F5EFE0;
+        }
+
+        /* define o estilo das classificacoes nova */
+        .simbolo.nova-1,
+        .simbolo.nova-2,
+        .simbolo.nova-3,
+        .simbolo.nova-4 {
+            background: #F5EFE0;
+            color: #2D6A4F;
+        }
+
+        /* define o estilo das classificacoes ambientais */
+        .simbolo.eco-a,
+        .simbolo.eco-b,
+        .simbolo.eco-c,
+        .simbolo.eco-d,
+        .simbolo.eco-e {
+            background: #2D6A4F;
+            color: #F5EFE0;
+        }
+
+        .classificacao h3 {
+            margin: 0 0 7px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .classificacao p {
+            margin: 0;
+            color: #2D6A4F;
+            font-size: 12px;
+            line-height: 1.45;
+            overflow-wrap: anywhere;
+        }
+
+        .classificacao .nota {
+            margin-top: 5px;
+            color: rgba(45, 106, 79, .75);
+            font-size: 11px;
+        }
+
+        /* organiza os cartoes de informacoes nutricionais */
+        .grade {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        /* define o estilo de cada informacao nutricional */
+        .nutriente {
+            padding: 17px;
+            border: 1px solid rgba(245, 239, 224, .2);
+            border-radius: 11px;
+            background: rgba(245, 239, 224, .04);
+        }
+
+        .nutriente span {
+            display: block;
+            margin-bottom: 10px;
+            color: rgba(245, 239, 224, .75);
+            font-size: 12px;
+        }
+
+        .nutriente strong {
+            font-size: 20px;
+            overflow-wrap: anywhere;
+        }
+
+        /* organiza os detalhes do produto */
+        .detalhe {
+            padding: 17px 0;
+            border-bottom: 1px solid rgba(245, 239, 224, .2);
+        }
+
+        .detalhe:last-child {
+            border-bottom: none;
+        }
+
+        .detalhe h3 {
+            margin: 0 0 9px;
+            font-size: 14px;
+        }
+
+        .detalhe p {
+            margin: 0;
+            color: rgba(245, 239, 224, .75);
+            font-size: 13px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        /* organiza os botoes de acao */
+        .botoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        /* define o estilo geral dos botoes */
+        .botao {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 18px;
+            border: 0;
+            border-radius: 9px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background .2s, opacity .2s;
+        }
+
+        .botao:hover {
+            background: rgba(245, 239, 224, .85);
+        }
+
+        /* define o estilo do botao secundario */
+        .botao-secundario {
+            border: 1px solid rgba(245, 239, 224, .3);
+            background: transparent;
+            color: #F5EFE0;
+        }
+
+        .botao-secundario:hover {
+            background: rgba(245, 239, 224, .1);
+        }
+
+        /* define o estilo do estado sem produto */
+        .estado {
+            padding: 25px;
+            border-radius: 12px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        .estado i {
+            font-size: 32px;
+        }
+
+        /* define o estilo do aviso no rodape */
+        .rodape {
+            margin-top: 20px;
+            color: rgba(245, 239, 224, .75);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        /* esconde elementos qnd necessario */
+        [hidden] {
+            display: none !important;
+        }
+
+        /* ajusta as classificacoes pra telas menores */
+        @media (max-width: 760px) {
+            .classificacoes {
+                grid-template-columns: 1fr;
+            }
+
+            .classificacao {
+                min-height: 82px;
+            }
+        }
+
+        /* ajusta a pagina pra celulares */
+        @media (max-width: 600px) {
+            .topbar {
+                height: 76px;
+                padding: 0 20px;
+            }
+
+            .topbar-logo img {
+                width: 48px;
+                height: 48px;
+            }
+
+            .content {
+                padding: 25px 16px;
+            }
+
+            .painel {
+                padding: 17px;
+            }
+
+            .produto-topo {
+                align-items: flex-start;
+                gap: 14px;
+            }
+
+            .produto-imagem {
+                width: 105px;
+                height: 115px;
+            }
+
+            .produto-nome {
+                font-size: 19px;
+            }
+
+            .grade {
+                gap: 8px;
+            }
+
+            .nutriente {
+                padding: 12px;
+            }
+
+            .nutriente strong {
+                font-size: 16px;
+            }
+
+            .botoes .botao {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- organiza a barra superior -->
+    <header class="topbar">
+        <div></div>
+
+        <!-- mostra a logo do quiri -->
+        <a href="/dashboard.html" class="topbar-logo" aria-label="Quiri - Início">
+            <img src="/imagens/logoquiri.png" alt="Logo Quiri">
+        </a>
+
+        <!-- cria o botao para abrir o menu -->
+        <button class="botao-menu" id="abrirMenu" type="button" aria-label="Abrir menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- mostra o fundo do menu lateral -->
+    <div class="fundo-menu" id="fundoMenu"></div>
+
+    <!-- organiza as opcoes do menu lateral -->
+    <aside class="menu-lateral" id="menuLateral" aria-hidden="true">
+        <div class="menu-cabecalho">
+            <h2>MENU</h2>
+
+            <!-- cria o botao para fechar o menu -->
+            <button type="button" id="fecharMenu" aria-label="Fechar menu">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+
+        <!-- cria o link para a pagina inicial -->
+        <a class="item-menu" href="/dashboard.html">
+            <i class="ti ti-home"></i>
+            Início
+        </a>
+
+        <!-- cria o link para as dietas -->
+        <a class="item-menu" href="/dietas.html">
+            <i class="ti ti-salad"></i>
+            Dietas
+        </a>
+
+        <!-- cria o link para as consultas -->
+        <a class="item-menu" href="/consultas.html">
+            <i class="ti ti-calendar"></i>
+            Consultas
+        </a>
+
+        <!-- destaca o link do leitor de codigo de barras -->
+        <a class="item-menu ativo" href="/leitor.html">
+            <i class="ti ti-barcode"></i>
+            Leitor de código de barras
+        </a>
+
+        <!-- separa os links principais das opcoes da conta -->
+        <div class="menu-separador"></div>
+
+        <!-- cria o link para o perfil -->
+        <a class="item-menu" href="/perfil.html">
+            <i class="ti ti-user-circle"></i>
+            Meu perfil
+        </a>
+
+        <!-- cria o link para sair da conta -->
+        <a class="item-menu" href="/login.html" id="btnSair">
+            <i class="ti ti-logout"></i>
+            Sair da conta
+        </a>
+    </aside>
+
+    <!-- organiza o conteudo principal da pagina -->
+    <main class="content">
+        <!-- mostra o aviso qnd nenhum produto e encontrado -->
+        <section class="painel">
+            <div id="estadoVazio" class="estado" hidden>
+                <i class="ti ti-package-off"></i>
+                <p>Nenhum produto foi encontrado</p>
+                <a class="botao" href="/leitor.html">Buscar alimento</a>
+            </div>
+
+            <!-- mostra as informacoes do produto encontrado -->
+            <div id="conteudoProduto" hidden>
+                <!-- organiza a identificacao do produto -->
+                <div class="produto-topo">
+                    <img id="imagemProduto" class="produto-imagem" alt="Imagem do alimento" hidden>
+
+                    <div>
+                        <h2 id="nomeProduto" class="produto-nome"></h2>
+                        <p id="marcaProduto" class="marca"></p>
+                        <p id="codigoProduto" class="codigo"></p>
+                        <p id="quantidadeTopo" class="marca"></p>
+                    </div>
+                </div>
+
+                <!-- mostra as classificacoes do produto -->
+                <h2 class="secao-titulo">Classificação do produto</h2>
+
+                <div class="classificacoes">
+                    <!-- mostra a classificacao nutricional -->
+                    <article class="classificacao nutri">
+                        <div id="simboloNutri" class="simbolo">?</div>
+
+                        <div>
+                            <h3 id="tituloNutri">Nutri-Score</h3>
+                            <p id="descricaoNutri">Classificação nutricional</p>
+                            <p class="nota" id="notaNutri">Dados não disponíveis</p>
+                        </div>
+                    </article>
+
+                    <!-- mostra a classificacao do processamento -->
+                    <article class="classificacao nova">
+                        <div id="simboloNova" class="simbolo">?</div>
+
+                        <div>
+                            <h3>Classificação NOVA</h3>
+                            <p id="descricaoNova">Grau de processamento</p>
+                            <p class="nota" id="notaNova">Dados não disponíveis</p>
+                        </div>
+                    </article>
+
+                    <!-- mostra a classificacao do impacto ambiental -->
+                    <article class="classificacao eco">
+                        <div id="simboloEco" class="simbolo">?</div>
+
+                        <div>
+                            <h3 id="tituloEco">Green-Score</h3>
+                            <p id="descricaoEco">Impacto ambiental</p>
+                            <p class="nota" id="notaEco">Dados não disponíveis</p>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- mostra as informacoes nutricionais do produto -->
+                <h2 class="secao-titulo">Informações nutricionais</h2>
+                <p class="subtitulo">Valores por 100 g ou 100 ml, conforme os dados cadastrados.</p>
+
+                <div class="grade">
+                    <div class="nutriente">
+                        <span>Energia</span>
+                        <strong id="calorias">—</strong>
+                    </div>
+
+                    <div class="nutriente">
+                        <span>Proteínas</span>
+                        <strong id="proteinas">—</strong>
+                    </div>
+
+                    <div class="nutriente">
+                        <span>Carboidratos</span>
+                        <strong id="carboidratos">—</strong>
+                    </div>
+
+                    <div class="nutriente">
+                        <span>Gorduras totais</span>
+                        <strong id="gorduras">—</strong>
+                    </div>
+
+                    <div class="nutriente">
+                        <span>Açúcares</span>
+                        <strong id="acucares">—</strong>
+                    </div>
+
+                    <div class="nutriente">
+                        <span>Gordura saturada</span>
+                        <strong id="gorduraSaturada">—</strong>
+                    </div>
+
+                    <div class="nutriente">
+                        <span>Fibras</span>
+                        <strong id="fibras">—</strong>
+                    </div>
+
+                    <div class="nutriente">
+                        <span>Sal</span>
+                        <strong id="sal">—</strong>
+                    </div>
+
+                    <div class="nutriente">
+                        <span>Sódio</span>
+                        <strong id="sodio">—</strong>
+                    </div>
+
+                    <div class="nutriente">
+                        <span>Porção informada</span>
+                        <strong id="porcao">—</strong>
+                    </div>
+                </div>
+
+                <!-- mostra os detalhes complementares do produto -->
+                <h2 class="secao-titulo">Detalhes do produto</h2>
+
+                <div class="detalhe">
+                    <h3>Ingredientes</h3>
+                    <p id="ingredientes"></p>
+                </div>
+
+                <div class="detalhe">
+                    <h3>Alérgenos declarados</h3>
+                    <p id="alergenos"></p>
+                </div>
+
+                <div class="detalhe">
+                    <h3>Pode conter traços de</h3>
+                    <p id="tracos"></p>
+                </div>
+
+                <div class="detalhe">
+                    <h3>Aditivos alimentares</h3>
+                    <p id="aditivos"></p>
+                </div>
+
+                <div class="detalhe">
+                    <h3>Categorias</h3>
+                    <p id="categorias"></p>
+                </div>
+
+                <div class="detalhe">
+                    <h3>Origem e fabricação</h3>
+                    <p id="origem"></p>
+                </div>
+
+                <!-- organiza as acoes do produto -->
+                <div class="botoes">
+                    <!-- permite buscar outro produto -->
+                    <a class="botao" href="/leitor.html">
+                        <i class="ti ti-barcode"></i>
+                        Ler outro produto
+                    </a>
+
+                    <!-- limpa os dados da consulta atual -->
+                    <button class="botao botao-secundario" id="limparProduto" type="button">
+                        <i class="ti ti-trash"></i>
+                        Limpar consulta
+                    </button>
+                </div>
+            </div>
+
+            <!-- informa a origem e as limitacoes dos dados -->
+            <p class="rodape">
+                Fonte: Open Food Facts. As informações são colaborativas e podem estar incompletas ou desatualizadas. As classificações são indicadores informativos e não substituem a leitura da embalagem nem a orientação de um nutricionista.
+            </p>
+        </section>
+    </main>
+
+    <script>
+        // facilita a busca de elementos pelo id
+        const $ = id => document.getElementById(id);
+
+        // guarda os elementos do menu lateral
+        const menu = $("menuLateral");
+        const fundoMenu = $("fundoMenu");
+        const botaoAbrir = $("abrirMenu");
+
+        // abre o menu lateral
+        function abrirMenu() {
+            menu.classList.add("aberto");
+            fundoMenu.classList.add("aberto");
+            menu.setAttribute("aria-hidden", "false");
+            botaoAbrir.setAttribute("aria-expanded", "true");
+            document.body.classList.add("menu-aberto");
+            $("fecharMenu").focus();
+        }
+
+        // fecha o menu lateral
+        function fecharMenu() {
+            menu.classList.remove("aberto");
+            fundoMenu.classList.remove("aberto");
+            menu.setAttribute("aria-hidden", "true");
+            botaoAbrir.setAttribute("aria-expanded", "false");
+            document.body.classList.remove("menu-aberto");
+        }
+
+        // controla os botoes do menu
+        botaoAbrir.addEventListener("click", abrirMenu);
+        $("fecharMenu").addEventListener("click", fecharMenu);
+        fundoMenu.addEventListener("click", fecharMenu);
+
+        // fecha o menu qnd a tecla esc e pressionada
+        document.addEventListener("keydown", evento => {
+            if (evento.key === "Escape") fecharMenu();
+        });
+
+        // remove a identificacao da sessao ao sair da conta
+        $("btnSair").addEventListener("click", () => {
+            localStorage.removeItem("uidPaciente");
+        });
+
+        // converte os valores recebidos em texto
+        function texto(valor, padrao = "Não informado") {
+            if (valor === undefined || valor === null || valor === "") {
+                return padrao;
+            }
+
+            if (Array.isArray(valor)) {
+                return valor.length ? valor.join(", ") : padrao;
+            }
+
+            return String(valor);
+        }
+
+        // formata os valores numericos dos nutrientes
+        function nutriente(valor, unidade = "g") {
+            if (valor === undefined || valor === null || valor === "") {
+                return "Não informado";
+            }
+
+            const numero = Number(valor);
+
+            if (!Number.isFinite(numero)) {
+                return "Não informado";
+            }
+
+            return `${numero.toLocaleString("pt-BR", {
+                maximumFractionDigits: 2
+            })} ${unidade}`;
+        }
+
+        // identifica a unidade de energia disponivel
+        function energia(n) {
+            if (n["energy-kcal_100g"] != null) {
+                return nutriente(n["energy-kcal_100g"], "kcal");
+            }
+
+            if (n["energy_100g"] != null) {
+                return nutriente(n["energy_100g"], "kJ");
+            }
+
+            return "Não informado";
+        }
+
+        // atualiza o simbolo e a descricao da classificacao
+        function definirClassificacao(idSimbolo, idDescricao, idNota, valor, tipo) {
+            const simbolo = $(idSimbolo);
+            const descricao = $(idDescricao);
+            const nota = $(idNota);
+
+            simbolo.className = "simbolo";
+            simbolo.textContent = "?";
+
+            // verifica as classificacoes nutri-score e green-score
+            if (tipo === "nutri" || tipo === "eco") {
+                const grau = String(valor || "")
+                    .toLowerCase()
+                    .replace(/^[a-z]{2}:/, "");
+
+                const valido = ["a", "b", "c", "d", "e"].includes(grau);
+
+                if (!valido) {
+                    descricao.textContent = "Classificação indisponível";
+                    nota.textContent = "O produto não possui uma classificação registrada.";
+                    return;
+                }
+
+                simbolo.textContent = grau.toUpperCase();
+
+                simbolo.classList.add(
+                    tipo === "nutri" ? `nutri-${grau}` : `eco-${grau}`
+                );
+
+                // define as descricoes do nutri-score
+                if (tipo === "nutri") {
+                    const descricoes = {
+                        a: "Excelente qualidade nutricional",
+                        b: "Boa qualidade nutricional",
+                        c: "Qualidade nutricional intermediária",
+                        d: "Qualidade nutricional baixa",
+                        e: "Qualidade nutricional muito baixa"
+                    };
+
+                    descricao.textContent = descricoes[grau];
+                    nota.textContent = "Nutri-Score " + grau.toUpperCase();
+                } else {
+                    // define as descricoes do green-score
+                    const descricoes = {
+                        a: "Menor impacto ambiental",
+                        b: "Baixo impacto ambiental",
+                        c: "Impacto ambiental intermediário",
+                        d: "Impacto ambiental elevado",
+                        e: "Impacto ambiental muito elevado"
+                    };
+
+                    descricao.textContent = descricoes[grau];
+                    nota.textContent = "Green-Score " + grau.toUpperCase();
+                }
+
+                return;
+            }
+
+            // verifica se o grupo nova e valido
+            const numero = Number(valor);
+
+            if (![1, 2, 3, 4].includes(numero)) {
+                descricao.textContent = "Classificação indisponível";
+                nota.textContent = "O produto não possui um grupo NOVA registrado.";
+                return;
+            }
+
+            simbolo.textContent = numero;
+            simbolo.classList.add(`nova-${numero}`);
+
+            // define as descricoes dos grupos nova
+            const descricoes = {
+                1: "Alimentos in natura ou minimamente processados",
+                2: "Ingredientes culinários processados",
+                3: "Alimentos processados",
+                4: "Alimentos ultraprocessados"
+            };
+
+            descricao.textContent = descricoes[numero];
+            nota.textContent = `Grupo NOVA ${numero} de 4`;
+        }
+
+        // preenche a pagina com os dados do produto
+        function preencherProduto(p) {
+            const n = p.nutriments || {};
+
+            // preenche a identificacao do produto
+            $("nomeProduto").textContent = texto(p.product_name, "Nome não informado");
+            $("marcaProduto").textContent = "Marca: " + texto(p.brands);
+            $("codigoProduto").textContent = "Código de barras: " + texto(p.code);
+            $("quantidadeTopo").textContent = "Embalagem: " + texto(p.quantity);
+
+            // mostra a imagem do produto qnd estiver disponivel
+            const img = $("imagemProduto");
+
+            if (p.image_front_url || p.image_url) {
+                img.src = p.image_front_url || p.image_url;
+                img.hidden = false;
+
+                // esconde a imagem qnd ela nao puder ser carregada
+                img.onerror = () => {
+                    img.hidden = true;
+                };
+            } else {
+                img.removeAttribute("src");
+                img.hidden = true;
+            }
+
+            // atualiza as classificacoes do produto
+            definirClassificacao(
+                "simboloNutri",
+                "descricaoNutri",
+                "notaNutri",
+                p.nutriscore_grade || p.nutrition_grades,
+                "nutri"
+            );
+
+            definirClassificacao(
+                "simboloNova",
+                "descricaoNova",
+                "notaNova",
+                p.nova_group,
+                "nova"
+            );
+
+            definirClassificacao(
+                "simboloEco",
+                "descricaoEco",
+                "notaEco",
+                p.ecoscore_grade || p.green_score_grade,
+                "eco"
+            );
+
+            // preenche os valores nutricionais
+            $("calorias").textContent = energia(n);
+            $("proteinas").textContent = nutriente(n.proteins_100g);
+            $("carboidratos").textContent = nutriente(n.carbohydrates_100g);
+            $("gorduras").textContent = nutriente(n.fat_100g);
+            $("acucares").textContent = nutriente(n.sugars_100g);
+            $("gorduraSaturada").textContent = nutriente(n["saturated-fat_100g"]);
+            $("fibras").textContent = nutriente(n.fiber_100g);
+            $("sal").textContent = nutriente(n.salt_100g);
+            $("sodio").textContent = nutriente(n.sodium_100g);
+            $("porcao").textContent = texto(p.serving_size);
+
+            // preenche os detalhes complementares
+            $("ingredientes").textContent = texto(p.ingredients_text);
+            $("alergenos").textContent = texto(p.allergens);
+            $("tracos").textContent = texto(p.traces);
+
+            // organiza as informacoes sobre aditivos
+            const quantidadeAditivos = p.additives_n;
+            const nomesAditivos = p.additives_tags || p.additives;
+
+            if (Array.isArray(nomesAditivos) && nomesAditivos.length) {
+                $("aditivos").textContent =
+                    `${quantidadeAditivos != null ? quantidadeAditivos + " aditivo(s): " : ""}${nomesAditivos.join(", ")}`;
+            } else if (quantidadeAditivos != null) {
+                $("aditivos").textContent =
+                    `${quantidadeAditivos} aditivo(s) registrado(s).`;
+            } else {
+                $("aditivos").textContent = "Não informado";
+            }
+
+            // preenche as categorias do produto
+            $("categorias").textContent = texto(p.categories);
+
+            // organiza as informacoes de origem e fabricacao
+            $("origem").textContent = [
+                p.origins ? "Origem: " + p.origins : "",
+                p.manufacturing_places
+                    ? "Local de fabricação: " + p.manufacturing_places
+                    : "",
+                p.countries ? "Países de venda: " + p.countries : ""
+            ].filter(Boolean).join("\n") || "Não informado";
+
+            // mostra o conteudo do produto encontrado
+            $("conteudoProduto").hidden = false;
+            $("estadoVazio").hidden = true;
+        }
+
+        // mostra a mensagem qnd nao existe produto salvo
+        function mostrarVazio() {
+            $("conteudoProduto").hidden = true;
+            $("estadoVazio").hidden = false;
+        }
+
+        // recupera os dados do produto salvos na sessao
+        let dadosSalvos = sessionStorage.getItem("produtoQuiri");
+
+        if (dadosSalvos) {
+            try {
+                const produto = JSON.parse(dadosSalvos);
+
+                if (
+                    produto &&
+                    typeof produto === "object" &&
+                    produto.code
+                ) {
+                    preencherProduto(produto);
+                } else {
+                    mostrarVazio();
+                }
+            } catch {
+                // remove os dados salvos qnd eles sao invalidos
+                sessionStorage.removeItem("produtoQuiri");
+                mostrarVazio();
+            }
+        } else {
+            mostrarVazio();
+        }
+
+        // limpa a consulta atual e volta para o leitor
+        $("limparProduto").addEventListener("click", () => {
+            sessionStorage.removeItem("produtoQuiri");
+            window.location.href = "/leitor.html";
+        });
+    </script>
+</body>
+</html>

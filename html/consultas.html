@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiri — Consultas</title>
+
+    <!-- carrega os icones -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+    <style>
+        /* aplica o box sizing em todos os elementos */
+        * {
+            box-sizing: border-box;
+        }
+
+        /* define o estilo geral da pagina */
+        body {
+            margin: 0;
+            background: #2D6A4F;
+            color: #F5EFE0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* impede a rolagem qnd o menu estiver aberto */
+        body.menu-aberto {
+            overflow: hidden;
+        }
+
+        /* padroniza a fonte dos botoes */
+        button {
+            font: inherit;
+            cursor: pointer;
+        }
+
+        /* organiza a barra superior */
+        .barra-superior {
+            height: 108px;
+            padding: 0 40px;
+            background: #F5EFE0;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+        }
+
+        /* organiza o espaco da logo */
+        .topbar-logo {
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ajusta o tamanho da logo */
+        .topbar-logo img {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+        }
+
+        /* posiciona o botao do menu */
+        .botao-menu {
+            grid-column: 3;
+            justify-self: end;
+            width: 46px;
+            height: 46px;
+            border: 0;
+            border-radius: 8px;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* destaca o botao do menu ao passar o mouse */
+        .botao-menu:hover {
+            background: rgba(45, 106, 79, .1);
+        }
+
+        /* cria as tres linhas do botao do menu */
+        .botao-menu span {
+            width: 24px;
+            height: 2.5px;
+            border-radius: 3px;
+            background: #2D6A4F;
+        }
+
+        /* cria o fundo cinza do menu lateral */
+        .fundo-menu {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            background: rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            visibility: hidden;
+            transition: .25s;
+        }
+
+        /* mostra o fundo qnd o menu estiver aberto */
+        .fundo-menu.aberto {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* posiciona o menu lateral fora da tela */
+        .menu-lateral {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 31;
+            width: min(320px, 85vw);
+            height: 100%;
+            padding: 24px 18px;
+            overflow-y: auto;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            transform: translateX(100%);
+            visibility: hidden;
+            transition: .25s;
+        }
+
+        /* traz o menu lateral pra dentro da tela */
+        .menu-lateral.aberto {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        /* organiza o titulo e o botao de fechar do menu */
+        .menu-cabecalho {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+        }
+
+        /* ajusta o titulo do menu */
+        .menu-cabecalho h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        /* estiliza o botao de fechar o menu */
+        .menu-cabecalho button {
+            width: 42px;
+            height: 42px;
+            border: 0;
+            background: transparent;
+            color: #2D6A4F;
+            font-size: 25px;
+        }
+
+        /* organiza os links do menu */
+        .item-menu {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            padding: 14px 12px;
+            margin: 3px 0;
+            border-radius: 9px;
+            color: #2D6A4F;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        /* ajusta o tamanho dos icones do menu */
+        .item-menu i {
+            font-size: 20px;
+        }
+
+        /* destaca o link ativo e o link sob o mouse */
+        .item-menu:hover,
+        .item-menu.ativo {
+            background: rgba(45, 106, 79, .15);
+        }
+
+        /* cria a linha que separa os links */
+        .menu-separador {
+            height: 1px;
+            margin: 18px 8px;
+            background: rgba(45, 106, 79, .25);
+        }
+
+        /* limita e centraliza o conteudo principal */
+        main {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 40px;
+        }
+
+        /* define o espaco abaixo do cabecalho */
+        .cabecalho-pagina {
+            margin-bottom: 25px;
+        }
+
+        /* estiliza o titulo da pagina */
+        .cabecalho-pagina h1 {
+            margin: 0;
+            font-size: 25px;
+        }
+
+        /* separa as secoes da pagina */
+        .secao {
+            margin-bottom: 28px;
+        }
+
+        /* ajusta os titulos das secoes */
+        .secao h2 {
+            margin: 0 0 14px;
+            font-size: 18px;
+        }
+
+        /* organiza a lista de consultas */
+        .lista-consultas {
+            display: grid;
+            gap: 14px;
+        }
+
+        /* estiliza cada cartao de consulta */
+        .consulta-card {
+            width: 100%;
+            padding: 18px;
+            border: 1px solid rgba(245, 239, 224, .2);
+            border-radius: 12px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+        }
+
+        /* organiza o titulo e o status da consulta */
+        .consulta-topo {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        /* ajusta o titulo de cada consulta */
+        .consulta-card h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        /* ajusta a data exibida no cartao */
+        .consulta-data {
+            margin: 7px 0 12px;
+            font-size: 13px;
+        }
+
+        /* organiza as informacoes da consulta */
+        .consulta-info {
+            display: grid;
+            gap: 8px;
+        }
+
+        /* ajusta o texto das informacoes da consulta */
+        .consulta-info p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        /* destaca o status da consulta */
+        .status {
+            flex-shrink: 0;
+            padding: 6px 9px;
+            border-radius: 20px;
+            background: rgba(45, 106, 79, .12);
+            color: #2D6A4F;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        /* estiliza as mensagens de lista vazia */
+        .estado-vazio {
+            padding: 28px 18px;
+            border: 1px solid rgba(245, 239, 224, .2);
+            border-radius: 12px;
+            text-align: center;
+            color: #F5EFE0;
+        }
+
+        /* ajusta o icone do estado vazio */
+        .estado-vazio i {
+            font-size: 30px;
+            color: #F5EFE0;
+        }
+
+        /* destaca o titulo do estado vazio */
+        .estado-vazio strong {
+            display: block;
+            margin: 10px 0 6px;
+            color: #F5EFE0;
+            font-size: 14px;
+        }
+
+        /* ajusta a msg exibida qnd nao tiver consultas */
+        .estado-vazio p {
+            margin: 0;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* estiliza as mensagens informativas */
+        .aviso {
+            display: none;
+            margin-bottom: 16px;
+            padding: 12px;
+            border-radius: 9px;
+            background: #F5EFE0;
+            color: #2D6A4F;
+            font-size: 13px;
+        }
+
+        /* mostra o aviso qnd ele tiver conteudo */
+        .aviso.visivel {
+            display: block;
+        }
+
+        /* adapta a pagina para celulares e tablets */
+        @media (max-width: 700px) {
+            /* diminui a altura e o espacamento da barra */
+            .barra-superior {
+                height: 76px;
+                padding: 0 20px;
+            }
+
+            /* diminui a logo em telas menores */
+            .topbar-logo img {
+                width: 48px;
+                height: 48px;
+            }
+
+            /* reduz o espacamento do conteudo principal */
+            main {
+                padding: 24px 18px;
+            }
+
+            /* ajusta o titulo em telas menores */
+            .cabecalho-pagina h1 {
+                font-size: 22px;
+            }
+        }
+
+        /* adapta os elementos para celulares bem pequenos */
+        @media (max-width: 380px) {
+            /* diminui as margens laterais */
+            main {
+                padding: 20px 12px;
+            }
+
+            /* reduz o espacamento dos cartoes */
+            .consulta-card {
+                padding: 14px;
+            }
+
+            /* organiza o topo do cartao em telas estreitas */
+            .consulta-topo {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- cria a barra superior com a logo e o botao do menu -->
+    <header class="barra-superior">
+        <div></div>
+
+        <!-- leva o usuario para a pagina inicial -->
+        <a href="/dashboard.html" class="topbar-logo" aria-label="Página inicial">
+            <img src="/imagens/logoquiri.png" alt="Logo Quiri">
+        </a>
+
+        <!-- abre o menu lateral -->
+        <button class="botao-menu" id="abrirMenu" type="button" aria-label="Abrir menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </header>
+
+    <!-- escurece o fundo qnd o menu lateral abre -->
+    <div class="fundo-menu" id="fundoMenu"></div>
+
+    <!-- contem os links principais do sistema -->
+    <aside class="menu-lateral" id="menuLateral" aria-hidden="true">
+        <!-- mostra o titulo e o botao de fechar -->
+        <div class="menu-cabecalho">
+            <h2>MENU</h2>
+            <button id="fecharMenu" type="button" aria-label="Fechar menu">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+
+        <!-- link para o inicio -->
+        <a class="item-menu" href="/dashboard.html">
+            <i class="ti ti-home"></i> Início
+        </a>
+
+        <!-- link para as dietas -->
+        <a class="item-menu" href="/dietas.html">
+            <i class="ti ti-salad"></i> Dietas
+        </a>
+
+        <!-- indica a pagina atual -->
+        <a class="item-menu ativo" href="/consultas.html">
+            <i class="ti ti-calendar"></i> Consultas
+        </a>
+
+        <!-- link para o leitor de codigo de barras -->
+        <a class="item-menu" href="/leitor.html">
+            <i class="ti ti-barcode"></i> Leitor de Código de Barras
+        </a>
+
+        <!-- separa os links principais dos links da conta -->
+        <div class="menu-separador"></div>
+
+        <!-- link para o perfil do paciente -->
+        <a class="item-menu" href="/perfil.html">
+            <i class="ti ti-user-circle"></i> Meu perfil
+        </a>
+
+        <!-- link para sair da conta -->
+        <a class="item-menu" href="/login.html" id="btnSair">
+            <i class="ti ti-logout"></i> Sair da conta
+        </a>
+    </aside>
+
+    <!-- contem a lista principal de consultas -->
+    <main>
+        <!-- mostra o titulo da pagina -->
+        <section class="cabecalho-pagina">
+            <h1>CONSULTAS</h1>
+        </section>
+
+        <!-- mostra avisos de erro ou de sessao -->
+        <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+
+        <!-- lista as consultas futuras -->
+        <section class="secao">
+            <h2>Próximas consultas</h2>
+            <div class="lista-consultas" id="proximasConsultas">
+                <div class="estado-vazio">
+                    <i class="ti ti-calendar"></i>
+                    <strong>Carregando consultas...</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- lista as consultas anteriores -->
+        <section class="secao">
+            <h2>Consultas anteriores</h2>
+            <div class="lista-consultas" id="consultasAnteriores">
+                <div class="estado-vazio">
+                    <i class="ti ti-history"></i>
+                    <strong>Carregando historico...</strong>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // cria um atalho pra selecionar elementos da pagina
+        const $ = seletor => document.getElementById(seletor);
+
+        // recupera o identificador do paciente salvo no navegador
+        const uidPaciente = localStorage.getItem("uidPaciente");
+
+        // abre ou fecha o menu lateral e atualiza os estados acessiveis
+        function controlarMenu(aberto) {
+            $("menuLateral").classList.toggle("aberto", aberto);
+            $("fundoMenu").classList.toggle("aberto", aberto);
+            document.body.classList.toggle("menu-aberto", aberto);
+            $("menuLateral").setAttribute("aria-hidden", String(!aberto));
+            $("abrirMenu").setAttribute("aria-expanded", String(aberto));
+        }
+
+        // registra os eventos dos botoes do menu
+        $("abrirMenu").addEventListener("click", () => controlarMenu(true));
+        $("fecharMenu").addEventListener("click", () => controlarMenu(false));
+        $("fundoMenu").addEventListener("click", () => controlarMenu(false));
+
+        // remove o identificador salvo qnd o usuario sair da conta
+        $("btnSair").addEventListener("click", () => {
+            localStorage.removeItem("uidPaciente");
+        });
+
+        // fecha o menu usando a tecla esc
+        document.addEventListener("keydown", evento => {
+            if (evento.key === "Escape") controlarMenu(false);
+        });
+
+        // converte a data da consulta em um objeto de data
+        function dataHoraConsulta(consulta) {
+            const valor = consulta.dataehoras;
+
+            if (!valor) return null;
+
+            if (typeof valor.toDate === "function") {
+                return valor.toDate();
+            }
+
+            const data = new Date(valor);
+            return Number.isNaN(data.getTime()) ? null : data;
+        }
+
+        // transforma a data num formato facil de ler
+        function formatarData(data) {
+            return data.toLocaleDateString("pt-BR", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric"
+            });
+        }
+
+        // transforma o horario num formato de hora e minuto
+        function formatarHora(data) {
+            return data.toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit"
+            });
+        }
+
+        // mostra um aviso na tela
+        function mostrarAviso(texto) {
+            $("aviso").textContent = texto;
+            $("aviso").classList.add("visivel");
+        }
+
+        // mostra uma msg qnd a lista nao tem consultas
+        function mostrarVazio(elemento, mensagem) {
+            const estado = document.createElement("div");
+            estado.className = "estado-vazio";
+
+            const icone = document.createElement("i");
+            icone.className = "ti ti-calendar";
+
+            const titulo = document.createElement("strong");
+            titulo.textContent = mensagem;
+
+            estado.append(icone, titulo);
+            $(elemento).replaceChildren(estado);
+        }
+
+        // monta o cartao com a data, o horario e o status da consulta
+        function criarCard(consulta, dataHora, anterior) {
+            const card = document.createElement("article");
+            card.className = "consulta-card";
+
+            const topo = document.createElement("div");
+            topo.className = "consulta-topo";
+
+            const titulo = document.createElement("h3");
+            titulo.textContent = anterior ? "Consulta anterior" : "Consulta agendada";
+
+            const status = document.createElement("span");
+            status.className = "status";
+            status.textContent = anterior ? "Fora do Prazo" : "Agendada";
+
+            topo.append(titulo, status);
+
+            const data = document.createElement("p");
+            data.className = "consulta-data";
+            data.textContent = formatarData(dataHora);
+
+            const info = document.createElement("div");
+            info.className = "consulta-info";
+
+            const horario = document.createElement("p");
+            horario.textContent = "Horário: " + formatarHora(dataHora);
+
+            info.append(horario);
+            card.append(topo, data, info);
+
+            return card;
+        }
+
+        // busca as consultas do paciente e separa as futuras das anteriores
+        async function carregarConsultas() {
+            if (!uidPaciente) {
+                mostrarAviso("Sessão não encontrada. Entre novamente pelo login.");
+                mostrarVazio("proximasConsultas", "Não foi possível carregar as consultas.");
+                mostrarVazio("consultasAnteriores", "Entre na sua conta para consultar o histórico.");
+                return;
+            }
+
+            try {
+                // pede ao servidor os dados do paciente e suas consultas
+                const resposta = await fetch("/api/paciente/dashboard", {
+                    headers: {
+                        "x-paciente-uid": uidPaciente
+                    }
+                });
+
+                // transforma a resposta do servidor em dados javascript
+                const dados = await resposta.json();
+
+                // mostra erro caso o servidor nao consiga carregar os dados
+                if (!resposta.ok) {
+                    throw new Error(dados.mensagem || "Erro ao carregar consultas.");
+                }
+
+                // garante q a lista seja um array
+                const consultas = Array.isArray(dados.consultas)
+                    ? dados.consultas
+                    : [];
+
+                // pega a data e hora atual
+                const agora = new Date();
+
+                // converte as datas, filtra valores invalidos e ordena por data
+                const organizadas = consultas
+                    .map(consulta => ({
+                        consulta,
+                        dataHora: dataHoraConsulta(consulta)
+                    }))
+                    .filter(item => item.dataHora)
+                    .sort((a, b) => a.dataHora - b.dataHora);
+
+                // separa as consultas futuras das anteriores
+                const futuras = organizadas.filter(item => item.dataHora >= agora);
+                const anteriores = organizadas.filter(item => item.dataHora < agora).reverse();
+
+                // mostra as consultas futuras ou uma mensagem
+                if (futuras.length) {
+                    $("proximasConsultas").replaceChildren(
+                        ...futuras.map(item =>
+                            criarCard(item.consulta, item.dataHora, false)
+                        )
+                    );
+                } else {
+                    mostrarVazio("proximasConsultas", "Você não tem consultas futuras.");
+                }
+
+                // mostra as consultas anteriores ou uma mensagem
+                if (anteriores.length) {
+                    $("consultasAnteriores").replaceChildren(
+                        ...anteriores.map(item =>
+                            criarCard(item.consulta, item.dataHora, true)
+                        )
+                    );
+                } else {
+                    mostrarVazio("consultasAnteriores", "Nenhuma consulta anterior");
+                }
+
+            } catch (erro) {
+                // registra o erro e informa o usuario na pagina
+                console.error("Erro ao carregar consultas:", erro);
+                mostrarAviso(erro.message || "Não foi possível carregar as consultas.");
+                mostrarVazio("proximasConsultas", "Erro ao carregar consultas.");
+                mostrarVazio("consultasAnteriores", "Erro ao carregar histórico.");
+            }
+        }
+
+        // carrega as consultas assim q a pagina iniciar
+        carregarConsultas();
+    </script>
+</body>
+</html>
+```
