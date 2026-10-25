@@ -7,23 +7,40 @@ const botaoCadastrar = document.getElementById("btn-cadastrar");
 
 // mostra uma mensagem na pagina
 function mostrarMensagem(texto, erro = false) {
+    toast.style.background = erro ? "#c0625a" : "#2D6A4F";
+    toast.style.color = "#ffffff";
     toast.textContent = texto;
-    toast.style.background = erro ? "#2D6A4F" : "#2D6A4F";
     toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+        toast.classList.remove("show");
+    }, 3000);
 }
+
+let toastTimer;
 
 // esconde a mensagem da pagina
 function limparMensagem() {
     toast.classList.remove("show");
+    clearTimeout(toastTimer);
 }
 
 // controla a exibicao das senhas
 document.querySelectorAll(".toggle-pass").forEach(botao => {
     botao.addEventListener("click", () => {
         const campo = document.getElementById(botao.dataset.target);
+
+        if (!campo) return;
+
         const mostrar = campo.type === "password";
 
         campo.type = mostrar ? "text" : "password";
+
+        botao.setAttribute(
+            "aria-pressed",
+            String(mostrar)
+        );
 
         botao.setAttribute(
             "aria-label",
@@ -44,9 +61,9 @@ document.getElementById("cad-senha").addEventListener("input", evento => {
     barra.style.width = `${Math.min(tamanho / 12 * 100, 100)}%`;
 
     barra.style.background = tamanho < 6
-        ? "#2D6A4F"
+        ? "#c0625a"
         : tamanho < 10
-            ? "#F5EFE0"
+            ? "#d4b27a"
             : "#2D6A4F";
 });
 
@@ -62,6 +79,7 @@ async function carregarNutricionistas() {
     radioNenhum.type = "radio";
     radioNenhum.name = "id_nutricionista";
     radioNenhum.value = "";
+    radioNenhum.checked = true;
 
     const informacoesNenhum = document.createElement("span");
     informacoesNenhum.className = "nutri-info";
@@ -130,15 +148,20 @@ async function carregarNutricionistas() {
         });
     } catch (erro) {
         // mostra uma mensagem qnd ocorre um erro ao carregar a lista
+        console.error("Erro ao carregar nutricionistas:", erro);
+
         statusNutricionistas.textContent =
             "Não foi possível carregar a lista de nutricionistas.";
 
-        mostrarMensagem(erro.message, true);
+        mostrarMensagem(
+            erro.message || "Erro ao conectar com o servidor.",
+            true
+        );
     }
 }
 
 // valida e envia os dados do cadastro
-formulario.addEventListener("submit", async evento => {
+formulario.addEventListener("submit", async function (evento) {
     evento.preventDefault();
     limparMensagem();
 
@@ -161,23 +184,36 @@ formulario.addEventListener("submit", async evento => {
     // limpa as mensagens de validacao anteriores
     document.getElementById("err-senha").classList.remove("show");
     document.getElementById("err-nutricionista").classList.remove("show");
+    document.getElementById("senha2-wrap")?.classList.remove("input-error");
+
+    // verifica se os campos obrigatorios foram preenchidos
+    if (!nome || !cpf || !nascimento || !telefone || !email || !senha || !confirmarSenha) {
+        mostrarMensagem("⚠ Preencha todos os campos.", true);
+        return;
+    }
 
     // verifica se o cpf possui onze numeros
     if (cpf.replace(/\D/g, "").length !== 11) {
-        mostrarMensagem("Digite um CPF com 11 números.", true);
+        mostrarMensagem("⚠ Digite um CPF válido.", true);
         return;
     }
 
     // verifica se o telefone e valido
-    if (telefone.replace(/\D/g, "").length < 10) {
-        mostrarMensagem("Digite um telefone válido.", true);
+    const telefoneNumeros = telefone.replace(/\D/g, "");
+
+    if (telefoneNumeros.length < 10 || telefoneNumeros.length > 11) {
+        mostrarMensagem("⚠ Digite um telefone válido.", true);
         return;
     }
 
     // impede o cadastro com data de nascimento futura
-    if (nascimento > new Date().toLocaleDateString("en-CA")) {
+    const dataNascimento = new Date(`${nascimento}T00:00:00`);
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    if (dataNascimento > hoje) {
         mostrarMensagem(
-            "A data de nascimento não pode estar no futuro.",
+            "⚠ A data de nascimento não pode estar no futuro.",
             true
         );
         return;
@@ -186,21 +222,33 @@ formulario.addEventListener("submit", async evento => {
     // verifica o tamanho minimo da senha
     if (senha.length < 6) {
         mostrarMensagem(
-            "A senha deve ter pelo menos 6 caracteres.",
+            "⚠ A senha deve ter pelo menos 6 caracteres.",
             true
         );
         return;
     }
 
+
+
     // verifica se as senhas digitadas sao iguais
     if (senha !== confirmarSenha) {
         document.getElementById("err-senha").classList.add("show");
+        document.getElementById("senha2-wrap")?.classList.add("input-error");
         return;
     }
 
-    // bloqueia o botao durante o cadastro
+    // organiza os dados do cadastro
+    const dados = {
+        nome,
+        cpf,
+        nascimento,
+        telefone,
+        email,
+        senha,
+        id_nutricionista: idNutricionista || null
+    };
+
     botaoCadastrar.disabled = true;
-    botaoCadastrar.textContent = "Criando conta...";
 
     try {
         // envia os dados do paciente para a api
@@ -209,44 +257,45 @@ formulario.addEventListener("submit", async evento => {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                nome,
-                cpf,
-                nascimento,
-                telefone,
-                email,
-                senha,
-                id_nutricionista: idNutricionista || null
-            })
+            body: JSON.stringify(dados)
         });
 
+        // recebe a resposta do servidor
         const resultado = await resposta.json();
 
-        // verifica se o servidor retornou algum erro
-        if (!resposta.ok) {
-            throw new Error(
+        // mostra a resposta no console
+        console.log("Resposta do cadastro:", resultado);
+
+        // verifica se o cadastro deu certo
+        if (resposta.ok) {
+            // informa q o cadastro foi realizado
+
+            console.log("UID do paciente:", resultado.uid);
+
+            // redireciona para a pagina de confirmacao
+            setTimeout(function () {
+                const destino = new URL(
+                    "/auth-pendente.html",
+                    window.location.origin
+                );
+
+                destino.searchParams.set("email", email);
+                window.location.href = destino.toString();
+            }, 1000);
+        } else {
+            // mostra o erro retornado pelo servidor
+            mostrarMensagem(
                 resultado.mensagem ||
-                "Não foi possível criar a conta."
+                "Não foi possível realizar o cadastro.",
+                true
             );
         }
-
-        // informa q o cadastro foi realizado
-        mostrarMensagem("Conta criada com sucesso!");
-
-        // redireciona para a pagina de confirmacao
-        setTimeout(() => {
-            const destino = new URL(
-                "/auth-pendente.html",
-                window.location.origin
-            );
-
-            destino.searchParams.set("email", email);
-            window.location.href = destino.toString();
-        }, 1200);
     } catch (erro) {
         // mostra uma mensagem qnd ocorre um erro no cadastro
+        console.error("Erro ao cadastrar paciente:", erro);
+
         mostrarMensagem(
-            erro.message || "Erro ao conectar com o servidor.",
+            "Erro ao conectar com o servidor.",
             true
         );
     } finally {

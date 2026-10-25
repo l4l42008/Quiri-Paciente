@@ -48,7 +48,6 @@ formularioLogin.addEventListener("submit", async function (evento) {
 
     // bloqueia o botao durante o login
     botaoEntrar.disabled = true;
-    botaoEntrar.textContent = "ENTRANDO...";
 
     try {
         // envia os dados do login para a api

@@ -94,6 +94,7 @@
             background: #F5EFE0;
             border: 1.5px solid transparent;
             border-radius: 8px;
+            transition: border-color .2s ease;
         }
 
         /* destaca a borda qnd algum campo da caixa estiver selecionado */
@@ -245,6 +246,11 @@
             display: block;
         }
 
+        /* destaca o campo q possui erro */
+        .input-error {
+            border-color: #c0625a !important;
+        }
+
         /* estiliza o botao principal de cadastro */
         .btn-primary {
             width: 100%;
@@ -260,11 +266,14 @@
             letter-spacing: .1em;
             text-transform: uppercase;
             cursor: pointer;
+            transition: background .2s ease, transform .12s ease;
+            pointer-events: auto;
         }
 
         /* destaca o botao qnd o mouse passa por cima */
         .btn-primary:hover {
-            background: #F5EFE0;
+            background: #ffffff;
+            transform: translateY(-1px);
         }
 
         /* mostra q o botao ta indisponivel durante o envio */
@@ -288,22 +297,31 @@
             text-decoration: none;
         }
 
-        /* define o estilo da caixa de notificacao */
-        .toast {
-            display: none;
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            color: #2D6A4F;
-            font-size: .75rem;
-            font-weight: 700;
-            line-height: 1.5;
+        /* cria a mensagem q aparece temporariamente na tela */
+        .toast{
+            position:fixed;
+            top:20px;
+            left:50%;
+            transform:translateX(-50%) translateY(-20px);
+            opacity:0;
+            pointer-events:none;
+            padding:12px 18px;
+            border-radius:8px;
+            color:#ffffff;
+            font-size:.75rem;
+            font-weight:700;
+            text-align:center;
+            z-index:9999;
+            transition:
+                opacity .2s ease,
+                transform .2s ease;
+            max-width:calc(100% - 40px);
         }
 
-        /* mostra a notificacao qnd a classe show for adicionada */
-        .toast.show {
-            display: block;
+        /* mostra a mensagem qdo a classe show e adicionada */
+        .toast.show{
+            opacity:1;
+            transform:translateX(-50%) translateY(0);
         }
 
         /* ajusta os espacos e a logo em telas menores */
@@ -368,7 +386,7 @@
             <div class="field">
                 <div class="field-wrap">
                     <i class="field-icon fa-solid fa-phone" aria-hidden="true"></i>
-                    <input type="tel" id="cad-telefone" placeholder="(00) 00000-0000" maxlength="15" autocomplete="tel" required>
+                    <input type="tel" id="cad-telefone" placeholder="TELEFONE" maxlength="15" autocomplete="tel" required>
                 </div>
             </div>
 
@@ -396,7 +414,7 @@
 
             <!-- campo pra repetir a senha e confirmar q ta igual -->
             <div class="field">
-                <div class="field-wrap">
+                <div class="field-wrap" id="senha2-wrap">
                     <i class="field-icon fa-solid fa-lock" aria-hidden="true"></i>
                     <input type="password" id="cad-senha2" placeholder="REPITA A SENHA" minlength="6" autocomplete="new-password" required>
                     <button type="button" class="toggle-pass" data-target="cad-senha2" aria-label="Mostrar senha">

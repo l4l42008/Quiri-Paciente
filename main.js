@@ -375,7 +375,7 @@ app.post("/api/paciente/cadastro", async (req, res) => {
         // trata o caso em q o e-mail informado é inválido
         if (erro.code === "auth/invalid-email") {
             return res.status(400).json({
-                mensagem: "Digite um e-mail válido."
+                mensagem: "⚠ Digite um e-mail válido."
             });
         }
 
