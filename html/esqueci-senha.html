@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,10 @@
     <!-- carrega as fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Montserrat:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <!-- carrega os icones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -19,6 +22,7 @@
             padding: 0;
             box-sizing: border-box;
         }
+
         /* define o estilo geral da pagina */
         body {
             min-height: 100vh;
@@ -30,6 +34,7 @@
             color: #F5EFE0;
             padding: 40px 20px;
         }
+
         /* organiza o bloco principal da pagina */
         .card {
             width: 100%;
@@ -38,6 +43,7 @@
             flex-direction: column;
             align-items: center;
         }
+
         /* define o estilo da logo */
         .logo {
             width: 190px;
@@ -45,6 +51,7 @@
             display: block;
             margin: 0 auto 25px;
         }
+
         /* define o estilo da frase abaixo da logo */
         .tagline {
             font-family: 'Caveat', cursive;
@@ -55,6 +62,7 @@
             margin-bottom: 34px;
             letter-spacing: .01em;
         }
+
         /* define o estilo do titulo da pagina */
         .title {
             width: 100%;
@@ -66,6 +74,7 @@
             text-transform: uppercase;
             margin-bottom: 10px;
         }
+
         /* define o estilo do texto de explicacao */
         .description {
             width: 100%;
@@ -75,6 +84,7 @@
             line-height: 1.6;
             margin-bottom: 22px;
         }
+
         /* organiza o formulario */
         form {
             width: 100%;
@@ -82,6 +92,7 @@
             flex-direction: column;
             gap: 14px;
         }
+
         /* esconde o label sem prejudicar a acessibilidade */
         .field label {
             position: absolute;
@@ -91,6 +102,7 @@
             clip: rect(0 0 0 0);
             white-space: nowrap;
         }
+
         /* define o estilo da caixa do campo */
         .field-wrap {
             position: relative;
@@ -104,10 +116,12 @@
             border: 1.5px solid transparent;
             transition: border-color .2s ease, transform .12s ease;
         }
+
         /* destaca o campo qnd ele esta selecionado */
         .field-wrap:focus-within {
             border-color: #2D6A4F;
         }
+
         /* define o estilo do icone do campo */
         .field-wrap i.field-icon {
             color: #2D6A4F;
@@ -116,6 +130,7 @@
             text-align: center;
             flex-shrink: 0;
         }
+
         /* define o estilo do campo de entrada */
         .field-wrap input {
             flex: 1;
@@ -130,11 +145,13 @@
             letter-spacing: .12em;
             text-transform: uppercase;
         }
+
         /* define o estilo do texto do placeholder */
         .field-wrap input::placeholder {
             color: rgba(45, 106, 79, .75);
             opacity: 1;
         }
+
         /* define o estilo da mensagem de erro */
         .error-message {
             display: none;
@@ -142,14 +159,17 @@
             margin-top: 5px;
             font-size: 14px;
         }
+
         /* mostra a mensagem de erro qnd necessario */
         .error-message.show {
             display: block;
         }
+
         /* destaca o campo qnd ocorre um erro */
         .input-error {
             border: 1px solid #2D6A4F !important;
         }
+
         /* define o estilo do botao principal */
         .btn-primary {
             margin-top: 10px;
@@ -166,16 +186,19 @@
             cursor: pointer;
             transition: background .2s ease, transform .12s ease, box-shadow .2s ease;
         }
+
         /* aplica o efeito do botao qnd passa o mouse */
         .btn-primary:hover {
             background: rgba(245, 239, 224, .9);
             transform: translateY(-1px);
             box-shadow: 0 6px 16px -8px rgba(45, 106, 79, .5);
         }
+
         /* aplica o efeito do botao qnd ele e clicado */
         .btn-primary:active {
             transform: translateY(0);
         }
+
         /* define o estilo do link pra voltar ao login */
         .back-login {
             display: table;
@@ -188,16 +211,20 @@
             font-size: .65rem;
             transition: color .15s ease;
         }
+
         /* muda a cor do link qnd passa o mouse */
         .back-login:hover {
             color: rgba(245, 239, 224, .75);
         }
+
         /* ajusta a pagina pra telas menores */
         @media (max-width: 340px) {
+
             /* diminui a logo em telas pequenas */
             .logo {
                 width: 160px;
             }
+
             /* ajusta o tamanho da frase em telas pequenas */
             .tagline {
                 font-size: 1.35rem;
@@ -205,6 +232,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- organiza o conteudo principal da pagina -->
     <main class="card">
@@ -248,4 +276,5 @@
     <!-- carrega o javascript da redefinicao de senha -->
     <script type="module" src="../js/esqueci-senha.js"></script>
 </body>
+
 </html>

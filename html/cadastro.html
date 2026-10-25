@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <!-- carrega as fontes -->
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Montserrat:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- carrega os icones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -298,30 +301,30 @@
         }
 
         /* cria a mensagem q aparece temporariamente na tela */
-        .toast{
-            position:fixed;
-            top:20px;
-            left:50%;
-            transform:translateX(-50%) translateY(-20px);
-            opacity:0;
-            pointer-events:none;
-            padding:12px 18px;
-            border-radius:8px;
-            color:#ffffff;
-            font-size:.75rem;
-            font-weight:700;
-            text-align:center;
-            z-index:9999;
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            opacity: 0;
+            pointer-events: none;
+            padding: 12px 18px;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: .75rem;
+            font-weight: 700;
+            text-align: center;
+            z-index: 9999;
             transition:
                 opacity .2s ease,
                 transform .2s ease;
-            max-width:calc(100% - 40px);
+            max-width: calc(100% - 40px);
         }
 
         /* mostra a mensagem qdo a classe show e adicionada */
-        .toast.show{
-            opacity:1;
-            transform:translateX(-50%) translateY(0);
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
         }
 
         /* ajusta os espacos e a logo em telas menores */
@@ -343,6 +346,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- agrupa todo o conteudo do cadastro do paciente -->
     <main class="card">
@@ -361,7 +365,8 @@
             <div class="field">
                 <div class="field-wrap">
                     <i class="field-icon fa-solid fa-user" aria-hidden="true"></i>
-                    <input type="text" id="cad-nome" placeholder="NOME COMPLETO" maxlength="100" autocomplete="name" required>
+                    <input type="text" id="cad-nome" placeholder="NOME COMPLETO" maxlength="100" autocomplete="name"
+                        required>
                 </div>
             </div>
 
@@ -369,7 +374,8 @@
             <div class="field">
                 <div class="field-wrap">
                     <i class="field-icon fa-solid fa-id-card" aria-hidden="true"></i>
-                    <input type="text" id="cad-cpf" placeholder="CPF" maxlength="14" autocomplete="off" inputmode="numeric" required>
+                    <input type="text" id="cad-cpf" placeholder="CPF" maxlength="14" autocomplete="off"
+                        inputmode="numeric" required>
                 </div>
             </div>
 
@@ -386,7 +392,8 @@
             <div class="field">
                 <div class="field-wrap">
                     <i class="field-icon fa-solid fa-phone" aria-hidden="true"></i>
-                    <input type="tel" id="cad-telefone" placeholder="TELEFONE" maxlength="15" autocomplete="tel" required>
+                    <input type="tel" id="cad-telefone" placeholder="TELEFONE" maxlength="15" autocomplete="tel"
+                        required>
                 </div>
             </div>
 
@@ -394,7 +401,8 @@
             <div class="field">
                 <div class="field-wrap">
                     <i class="field-icon fa-solid fa-envelope" aria-hidden="true"></i>
-                    <input type="email" id="cad-email" placeholder="E-MAIL" maxlength="255" autocomplete="email" required>
+                    <input type="email" id="cad-email" placeholder="E-MAIL" maxlength="255" autocomplete="email"
+                        required>
                 </div>
             </div>
 
@@ -402,7 +410,8 @@
             <div class="field">
                 <div class="field-wrap">
                     <i class="field-icon fa-solid fa-lock" aria-hidden="true"></i>
-                    <input type="password" id="cad-senha" placeholder="MÍNIMO 6 CARACTERES" minlength="6" autocomplete="new-password" required>
+                    <input type="password" id="cad-senha" placeholder="MÍNIMO 6 CARACTERES" minlength="6"
+                        autocomplete="new-password" required>
                     <button type="button" class="toggle-pass" data-target="cad-senha" aria-label="Mostrar senha">
                         <i class="fa-solid fa-eye" aria-hidden="true"></i>
                     </button>
@@ -416,7 +425,8 @@
             <div class="field">
                 <div class="field-wrap" id="senha2-wrap">
                     <i class="field-icon fa-solid fa-lock" aria-hidden="true"></i>
-                    <input type="password" id="cad-senha2" placeholder="REPITA A SENHA" minlength="6" autocomplete="new-password" required>
+                    <input type="password" id="cad-senha2" placeholder="REPITA A SENHA" minlength="6"
+                        autocomplete="new-password" required>
                     <button type="button" class="toggle-pass" data-target="cad-senha2" aria-label="Mostrar senha">
                         <i class="fa-solid fa-eye" aria-hidden="true"></i>
                     </button>
@@ -434,7 +444,8 @@
             <div class="nutri-list" id="lista-nutricionistas"></div>
 
             <!-- mostra o erro caso nenhuma opcao valida seja escolhida -->
-            <div class="error-msg" id="err-nutricionista">Selecione um nutricionista ou escolha "Nenhum nutricionista".</div>
+            <div class="error-msg" id="err-nutricionista">Selecione um nutricionista ou escolha "Nenhum nutricionista".
+            </div>
 
             <!-- envia os dados pra criar a conta -->
             <button class="btn-primary" id="btn-cadastrar" type="submit">Criar minha conta</button>
@@ -450,4 +461,5 @@
     <!-- carrega o javascript q controla o cadastro do paciente -->
     <script src="/js/cadastro.js" defer></script>
 </body>
+
 </html>

@@ -109,7 +109,7 @@ body {
 /* identificacao mostrada na apresentacao */
 .hero-badge {
   display: inline-block;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   padding: 5px 12px;
   font-size: 12px;
@@ -293,7 +293,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0, 0, 0, 0.45);
   z-index: 100;
   align-items: center;
   justify-content: center;
@@ -969,33 +969,33 @@ select.field-input {
 /* ajustes gerais para telas menores */
 @media (max-width: 900px) {
 
-/* container principal em telas menores */
+  /* container principal em telas menores */
   .app {
     max-width: 100%;
   }
 
-/* cards em duas colunas */
+  /* cards em duas colunas */
   .cards-row {
     grid-template-columns: repeat(2, 1fr);
   }
 
-/* estatisticas em duas colunas */
+  /* estatisticas em duas colunas */
   .stats-row {
     grid-template-columns: repeat(2, 1fr);
   }
 
-/* espaco lateral das secoes */
+  /* espaco lateral das secoes */
   .section {
     padding-left: 24px;
     padding-right: 24px;
   }
 
-/* espaco dos formularios */
+  /* espaco dos formularios */
   .auth-body {
     padding: 30px 24px;
   }
 
-/* espaco da apresentacao */
+  /* espaco da apresentacao */
   .hero {
     padding-left: 24px;
     padding-right: 24px;
@@ -1005,54 +1005,54 @@ select.field-input {
 /* ajustes para celular */
 @media (max-width: 600px) {
 
-/* espaco da barra superior no celular */
+  /* espaco da barra superior no celular */
   .topbar {
     padding: 14px 16px 10px;
   }
 
-/* tamanho do nome do app no celular */
+  /* tamanho do nome do app no celular */
   .topbar-logo span {
     font-size: 22px;
   }
 
-/* espaco da apresentacao no celular */
+  /* espaco da apresentacao no celular */
   .hero {
     padding: 0 16px 24px;
   }
 
-/* tamanho do nome na apresentacao */
+  /* tamanho do nome na apresentacao */
   .hero-name {
     font-size: 20px;
   }
 
-/* espaco do cabecalho de autenticacao */
+  /* espaco do cabecalho de autenticacao */
   .auth-hero {
     padding: 32px 24px 28px;
   }
 
-/* espaco do formulario no celular */
+  /* espaco do formulario no celular */
   .auth-body {
     padding: 24px 20px;
   }
 
-/* espaco das secoes no celular */
+  /* espaco das secoes no celular */
   .section {
     padding: 16px 16px 0;
   }
 
-/* cards em duas colunas no celular */
+  /* cards em duas colunas no celular */
   .cards-row {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
 
-/* estatisticas em duas colunas no celular */
+  /* estatisticas em duas colunas no celular */
   .stats-row {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
 
-/* itens da barra inferior distribuidos */
+  /* itens da barra inferior distribuidos */
   .bottom-nav {
     gap: 0;
     justify-content: space-around;

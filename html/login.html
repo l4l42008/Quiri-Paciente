@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +9,9 @@
     <!-- carrega as fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Montserrat:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
 
     <!-- carrega os icones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -274,6 +277,7 @@
 
         /* ajusta a pagina pra telas menores */
         @media (max-width: 340px) {
+
             /* diminui a logo em telas pequenas */
             .logo {
                 width: 160px;
@@ -306,15 +310,8 @@
                 <div class="field-wrap">
                     <i class="field-icon fa-solid fa-envelope" aria-hidden="true"></i>
 
-                    <input
-                        id="login"
-                        name="email"
-                        type="email"
-                        placeholder="E-MAIL"
-                        autocomplete="username"
-                        maxlength="255"
-                        required
-                    >
+                    <input id="login" name="email" type="email" placeholder="E-MAIL" autocomplete="username"
+                        maxlength="255" required>
                 </div>
             </div>
 
@@ -326,23 +323,12 @@
                 <div class="field-wrap">
                     <i class="field-icon fa-solid fa-lock" aria-hidden="true"></i>
 
-                    <input
-                        id="password"
-                        name="senha"
-                        type="password"
-                        placeholder="SENHA"
-                        autocomplete="current-password"
-                        required
-                    >
+                    <input id="password" name="senha" type="password" placeholder="SENHA"
+                        autocomplete="current-password" required>
 
                     <!-- cria o botao pra mostrar ou esconder a senha -->
-                    <button
-                        type="button"
-                        class="toggle-pass"
-                        id="togglePass"
-                        aria-label="Mostrar senha"
-                        aria-pressed="false"
-                    >
+                    <button type="button" class="toggle-pass" id="togglePass" aria-label="Mostrar senha"
+                        aria-pressed="false">
                         <i class="fa-solid fa-eye" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -373,4 +359,5 @@
     <!-- carrega o javascript do login -->
     <script src="/js/login.js" defer></script>
 </body>
+
 </html>

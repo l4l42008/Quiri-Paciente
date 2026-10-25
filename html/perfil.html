@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,11 +24,13 @@
             font-family: Arial, sans-serif;
         }
 
-        button, input {
+        button,
+        input {
             font: inherit;
         }
 
-        button, a {
+        button,
+        a {
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -452,8 +455,7 @@
         </a>
 
         <!-- cria o botao para abrir o menu -->
-        <button class="botao-menu" id="abrirMenu" type="button"
-                aria-label="Abrir menu" aria-expanded="false">
+        <button class="botao-menu" id="abrirMenu" type="button" aria-label="Abrir menu" aria-expanded="false">
             <span></span>
             <span></span>
             <span></span>
@@ -469,8 +471,7 @@
             <h2>MENU</h2>
 
             <!-- cria o botao para fechar o menu -->
-            <button class="fechar-menu" id="fecharMenu" type="button"
-                    aria-label="Fechar menu">
+            <button class="fechar-menu" id="fecharMenu" type="button" aria-label="Fechar menu">
                 <i class="ti ti-x"></i>
             </button>
         </div>
@@ -528,34 +529,29 @@
                 <div class="formulario">
                     <div class="campo largura-total">
                         <label for="nome">Nome completo</label>
-                        <input id="nome" name="nome" type="text"
-                               autocomplete="name" maxlength="120"
-                               required disabled>
+                        <input id="nome" name="nome" type="text" autocomplete="name" maxlength="120" required disabled>
                     </div>
 
                     <div class="campo">
                         <label for="cpf">CPF</label>
-                        <input id="cpf" name="cpf" type="text"
-                               inputmode="numeric" autocomplete="off"
-                               maxlength="14" disabled>
+                        <input id="cpf" name="cpf" type="text" inputmode="numeric" autocomplete="off" maxlength="14"
+                            disabled>
                     </div>
 
                     <div class="campo">
                         <label for="nascimento">Data de nascimento</label>
-                        <input id="nascimento" name="nascimento" type="date"
-                               autocomplete="bday" disabled>
+                        <input id="nascimento" name="nascimento" type="date" autocomplete="bday" disabled>
                     </div>
 
                     <div class="campo">
                         <label for="telefone">Telefone</label>
-                        <input id="telefone" name="telefone" type="tel"
-                               autocomplete="tel" maxlength="20" required disabled>
+                        <input id="telefone" name="telefone" type="tel" autocomplete="tel" maxlength="20" required
+                            disabled>
                     </div>
 
                     <div class="campo">
                         <label for="email">E-mail</label>
-                        <input id="email" name="email" type="email"
-                               autocomplete="email" disabled>
+                        <input id="email" name="email" type="email" autocomplete="email" disabled>
                     </div>
                 </div>
 
@@ -565,9 +561,7 @@
                     <p id="nutricionistaAtual">Carregando nutricionista...</p>
 
                     <!-- permite alterar o nutricionista vinculado -->
-                    <button class="botao botao-editar"
-                            id="alterarNutricionista"
-                            type="button" hidden>
+                    <button class="botao botao-editar" id="alterarNutricionista" type="button" hidden>
                         Alterar nutricionista
                     </button>
 
@@ -577,8 +571,7 @@
                         <div id="listaNutricionistas"></div>
 
                         <!-- cancela a alteracao do nutricionista -->
-                        <button class="botao botao-editar"
-                                id="cancelarAlteracaoNutri" type="button">
+                        <button class="botao botao-editar" id="cancelarAlteracaoNutri" type="button">
                             Cancelar
                         </button>
                     </div>
@@ -587,14 +580,12 @@
                 <!-- organiza os botoes de acao do perfil -->
                 <div class="acoes">
                     <!-- ativa a edicao dos dados -->
-                    <button class="botao botao-editar" id="editarPerfil"
-                            type="button">
+                    <button class="botao botao-editar" id="editarPerfil" type="button">
                         Editar dados
                     </button>
 
                     <!-- salva as alteracoes do perfil -->
-                    <button class="botao botao-salvar" id="salvarPerfil"
-                            type="submit" hidden>
+                    <button class="botao botao-salvar" id="salvarPerfil" type="submit" hidden>
                         Salvar alterações
                     </button>
                 </div>
@@ -969,4 +960,5 @@
         carregarPerfil();
     </script>
 </body>
+
 </html>

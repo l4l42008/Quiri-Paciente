@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
 
     <!-- carrega os icones -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-    
+
     <!-- carrega a biblioteca de leitura de codigo de barras -->
     <script src="https://unpkg.com/@zxing/browser@0.2.1"></script>
     <style>
@@ -340,6 +341,7 @@
 
         /* ajusta a pagina pra telas menores */
         @media (max-width: 600px) {
+
             /* ajusta a barra superior em telas menores */
             .topbar {
                 height: 76px;
@@ -384,6 +386,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- organiza a barra superior da pagina -->
     <header class="topbar">
@@ -428,7 +431,8 @@
     <!-- organiza o conteudo principal da pagina -->
     <main class="content">
         <h1 class="titulo">LEITOR DE ALIMENTOS</h1>
-        <p class="subtitulo">Escaneie o código de barras ou digite o número para consultar as informações do alimento.</p>
+        <p class="subtitulo">Escaneie o código de barras ou digite o número para consultar as informações do alimento.
+        </p>
 
         <!-- organiza o painel de busca do produto -->
         <section class="painel">
@@ -454,14 +458,17 @@
             <!-- cria o formulario de busca do produto -->
             <form id="formBusca">
                 <div class="campo-busca">
-                    <input id="codigoBarras" type="text" inputmode="numeric" autocomplete="off" placeholder="Digite o código de barras" aria-label="Código de barras" required>
+                    <input id="codigoBarras" type="text" inputmode="numeric" autocomplete="off"
+                        placeholder="Digite o código de barras" aria-label="Código de barras" required>
                     <button class="botao" id="btnBuscar" type="submit"><i class="ti ti-search"></i> Buscar</button>
                 </div>
             </form>
 
             <!-- mostra as mensagens de retorno da busca -->
             <div class="mensagem" id="mensagem" role="status" aria-live="polite"></div>
-            <p class="rodape">Fonte: Open Food Facts. As informações são colaborativas e podem estar incompletas ou desatualizadas. As classificações são indicadores informativos e não substituem a leitura da embalagem nem a orientação de um nutricionista.</p>
+            <p class="rodape">Fonte: Open Food Facts. As informações são colaborativas e podem estar incompletas ou
+                desatualizadas. As classificações são indicadores informativos e não substituem a leitura da embalagem
+                nem a orientação de um nutricionista.</p>
         </section>
     </main>
 
@@ -658,4 +665,5 @@
         window.addEventListener("pagehide", pararCamera);
     </script>
 </body>
+
 </html>

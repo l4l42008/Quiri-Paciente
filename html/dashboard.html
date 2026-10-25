@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -245,7 +246,7 @@
         }
 
         /* define o tamanho dos icones do estado vazio */
-        .empty-state > i {
+        .empty-state>i {
             color: #F5EFE0;
             font-size: 27px;
         }
@@ -465,9 +466,8 @@
             <a href="/dashboard.html" class="topbar-logo" aria-label="Quiri — Início">
                 <img src="/imagens/logoquiri.png" alt="logo quiri">
             </a>
-            <button class="botao-menu" id="abrirMenu" type="button"
-                    aria-label="Abrir menu" aria-expanded="false"
-                    aria-controls="menuLateral">
+            <button class="botao-menu" id="abrirMenu" type="button" aria-label="Abrir menu" aria-expanded="false"
+                aria-controls="menuLateral">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -539,12 +539,11 @@
 
     <!-- janela q mostra os detalhes da dieta selecionada -->
     <div class="modal-fundo" id="modalFundo" hidden>
-        <section class="modal" role="dialog" aria-modal="true"
-                 aria-labelledby="modalTitulo" aria-describedby="modalDescricao">
+        <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitulo"
+            aria-describedby="modalDescricao">
             <div class="modal-cabecalho">
                 <h2 id="modalTitulo">Detalhes da dieta</h2>
-                <button type="button" class="botao-modal" id="fecharModal"
-                        aria-label="Fechar detalhes">&times;</button>
+                <button type="button" class="botao-modal" id="fecharModal" aria-label="Fechar detalhes">&times;</button>
             </div>
 
             <!-- os detalhes da dieta sao criados pelo javascript -->
@@ -873,4 +872,5 @@
         carregarDashboard();
     </script>
 </body>
+
 </html>

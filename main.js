@@ -47,19 +47,19 @@ function formatarDataDieta(valor) {
     if (typeof valor.toDate === "function") {
         data = valor.toDate();
 
-    // converte timestamps q possuem o campo seconds
+        // converte timestamps q possuem o campo seconds
     } else if (typeof valor.seconds === "number") {
         data = new Date(valor.seconds * 1000);
 
-    // trata timestamps q usam o campo _seconds
+        // trata timestamps q usam o campo _seconds
     } else if (typeof valor._seconds === "number") {
         data = new Date(valor._seconds * 1000);
 
-    // mantém o valor caso ele já seja uma data
+        // mantém o valor caso ele já seja uma data
     } else if (valor instanceof Date) {
         data = valor;
 
-    // verifica se o valor recebido é uma string
+        // verifica se o valor recebido é uma string
     } else if (typeof valor === "string") {
         // se já estiver no formato ano-mês-dia, retorna sem alterar
         if (/^\d{4}-\d{2}-\d{2}$/.test(valor)) return valor;
@@ -67,7 +67,7 @@ function formatarDataDieta(valor) {
         // tenta converter a string em uma data
         data = new Date(valor);
 
-    // retorna null se o formato n for reconhecido
+        // retorna null se o formato n for reconhecido
     } else {
         return null;
     }
@@ -201,7 +201,7 @@ app.post("/api/paciente/login", async (req, res) => {
             // retorna um status adequado de acordo com o erro recebido
             return res.status(
                 codigo === "API_KEY_INVALID" ? 500 :
-                codigo === "OPERATION_NOT_ALLOWED" ? 400 : 401
+                    codigo === "OPERATION_NOT_ALLOWED" ? 400 : 401
             ).json({
                 mensagem: mensagens[codigo] || "Não foi possível realizar o login."
             });

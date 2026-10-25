@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
         * {
             box-sizing: border-box;
         }
+
         /* define o estilo geral da pagina */
         body {
             margin: 0;
@@ -19,21 +21,25 @@
             color: #F5EFE0;
             font-family: Arial, sans-serif;
         }
+
         /* impede a rolagem qnd um modal ou menu estiver aberto */
         body.modal-aberto,
         body.menu-aberto {
             overflow: hidden;
         }
+
         /* padroniza a fonte dos campos e botoes */
         button,
         input,
         textarea {
             font: inherit;
         }
+
         /* mostra a mao nos botoes clicaveis */
         button {
             cursor: pointer;
         }
+
         /* organiza a barra superior */
         .barra-superior {
             height: 108px;
@@ -43,6 +49,7 @@
             grid-template-columns: 1fr auto 1fr;
             align-items: center;
         }
+
         /* organiza o espaco da logo */
         .topbar-logo {
             width: 64px;
@@ -51,12 +58,14 @@
             align-items: center;
             justify-content: center;
         }
+
         /* ajusta o tamanho da logo */
         .topbar-logo img {
             width: 56px;
             height: 56px;
             object-fit: contain;
         }
+
         /* posiciona o botao do menu */
         .botao-menu {
             grid-column: 3;
@@ -72,10 +81,12 @@
             justify-content: center;
             gap: 6px;
         }
+
         /* destaca o botao do menu ao passar o mouse */
         .botao-menu:hover {
             background: rgba(45, 106, 79, .1);
         }
+
         /* cria as tres linhas do botao do menu */
         .botao-menu span {
             width: 24px;
@@ -83,6 +94,7 @@
             border-radius: 3px;
             background: #2D6A4F;
         }
+
         /* cria o fundo escuro do menu lateral */
         .fundo-menu {
             position: fixed;
@@ -93,11 +105,13 @@
             visibility: hidden;
             transition: .25s;
         }
+
         /* mostra o fundo qnd o menu estiver aberto */
         .fundo-menu.aberto {
             opacity: 1;
             visibility: visible;
         }
+
         /* posiciona o menu lateral fora da tela */
         .menu-lateral {
             position: fixed;
@@ -114,11 +128,13 @@
             visibility: hidden;
             transition: .25s;
         }
+
         /* traz o menu lateral pra dentro da tela */
         .menu-lateral.aberto {
             transform: translateX(0);
             visibility: visible;
         }
+
         /* organiza o titulo e o botao de fechar do menu */
         .menu-cabecalho {
             display: flex;
@@ -126,11 +142,13 @@
             justify-content: space-between;
             margin-bottom: 28px;
         }
+
         /* ajusta o titulo do menu */
         .menu-cabecalho h2 {
             margin: 0;
             font-size: 22px;
         }
+
         /* estiliza o botao de fechar o menu */
         .menu-cabecalho button {
             width: 42px;
@@ -140,6 +158,7 @@
             color: #2D6A4F;
             font-size: 25px;
         }
+
         /* organiza os links do menu */
         .item-menu {
             display: flex;
@@ -152,21 +171,25 @@
             font-size: 14px;
             text-decoration: none;
         }
+
         /* ajusta o tamanho dos icones do menu */
         .item-menu i {
             font-size: 20px;
         }
+
         /* destaca o link ativo e o link sob o mouse */
         .item-menu:hover,
         .item-menu.ativo {
             background: rgba(45, 106, 79, .15);
         }
+
         /* cria a linha que separa os links */
         .menu-separador {
             height: 1px;
             margin: 18px 8px;
             background: rgba(45, 106, 79, .25);
         }
+
         /* limita e centraliza o conteudo principal */
         main {
             width: 100%;
@@ -174,20 +197,24 @@
             margin: 0 auto;
             padding: 30px 40px;
         }
+
         /* define o espaco abaixo do cabecalho */
         .cabecalho-pagina {
             margin-bottom: 25px;
         }
+
         /* estiliza o titulo da pagina */
         .cabecalho-pagina h1 {
             margin: 0;
             font-size: 25px;
         }
+
         /* organiza a lista de dietas */
         #listaDietas {
             display: grid;
             gap: 14px;
         }
+
         /* estiliza cada cartao de dieta */
         .dieta {
             width: 100%;
@@ -199,17 +226,20 @@
             text-align: left;
             transition: transform .15s, box-shadow .15s;
         }
+
         /* movimenta o cartao ao passar o mouse */
         .dieta:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(45, 106, 79, .2);
         }
+
         /* estiliza o titulo de cada dieta */
         .dieta h2 {
             margin: 0 0 10px;
             font-size: 18px;
             overflow-wrap: anywhere;
         }
+
         /* estiliza as informacoes dos cartoes */
         .dieta p {
             margin: 6px 0;
@@ -217,12 +247,14 @@
             line-height: 1.5;
             overflow-wrap: anywhere;
         }
+
         /* estiliza as mensagens informativas */
         .mensagem {
             color: #F5EFE0;
             font-size: 14px;
             line-height: 1.6;
         }
+
         /* cria a camada de fundo dos modais */
         .modal {
             position: fixed;
@@ -234,10 +266,12 @@
             padding: 18px;
             background: rgba(45, 106, 79, .85);
         }
+
         /* exibe o modal qnd ele estiver aberto */
         .modal.aberto {
             display: flex;
         }
+
         /* define o visual e o tamanho do conteudo dos modais */
         .modal-conteudo {
             width: 100%;
@@ -249,6 +283,7 @@
             background: #F5EFE0;
             color: #2D6A4F;
         }
+
         /* organiza o cabecalho dos modais */
         .modal-cabecalho {
             display: flex;
@@ -257,12 +292,14 @@
             gap: 12px;
             margin-bottom: 18px;
         }
+
         /* estiliza os titulos dos modais */
         .modal-cabecalho h2 {
             margin: 0;
             font-size: 21px;
             overflow-wrap: anywhere;
         }
+
         /* estiliza o botao de fechar os modais */
         .fechar-modal {
             flex-shrink: 0;
@@ -277,6 +314,7 @@
             font-size: 25px;
             cursor: pointer;
         }
+
         /* mantem o visual do botao de fechar sem fundo */
         .fechar-modal:hover,
         .fechar-modal:focus,
@@ -285,6 +323,7 @@
             box-shadow: none;
             outline: none;
         }
+
         /* estiliza os detalhes da dieta */
         .detalhe {
             margin: 12px 0;
@@ -292,6 +331,7 @@
             font-size: 14px;
             overflow-wrap: anywhere;
         }
+
         /* organiza os botoes dos modais */
         .acoes-modal {
             display: flex;
@@ -300,6 +340,7 @@
             gap: 10px;
             margin-top: 22px;
         }
+
         /* define o estilo geral dos botoes */
         .botao {
             padding: 11px 16px;
@@ -307,26 +348,31 @@
             border-radius: 8px;
             font-weight: bold;
         }
+
         /* define o estilo do botao principal */
         .botao-principal {
             background: #2D6A4F;
             color: #F5EFE0;
         }
+
         /* aplica transparencia no hover sem mudar a cor da marca */
         .botao-principal:hover {
             background: rgba(45, 106, 79, .85);
         }
+
         /* organiza os campos do formulario */
         .campo {
             display: grid;
             gap: 8px;
             margin: 16px 0;
         }
+
         /* destaca os nomes dos campos */
         .campo label {
             font-size: 14px;
             font-weight: bold;
         }
+
         /* estiliza a area de texto do feedback */
         .campo textarea {
             width: 100%;
@@ -338,11 +384,13 @@
             color: #2D6A4F;
             resize: vertical;
         }
+
         /* organiza as estrelas de avaliacao */
         .estrelas {
             display: flex;
             gap: 8px;
         }
+
         /* define o visual das estrelas */
         .estrela {
             padding: 0;
@@ -352,6 +400,7 @@
             color: rgba(45, 106, 79, .45);
             font-size: 32px;
         }
+
         /* remove o fundo dos botoes de estrela */
         .estrela:hover,
         .estrela:focus {
@@ -359,57 +408,70 @@
             box-shadow: none;
             outline: none;
         }
+
         /* destaca as estrelas selecionadas */
         .estrela.selecionada {
             color: #2D6A4F;
         }
+
         /* reserva espaco para mensagens do formulario */
         #mensagemFeedback {
             min-height: 20px;
             font-size: 13px;
             line-height: 1.5;
         }
+
         /* mostra q o envio esta em andamento */
         #salvarFeedback:disabled {
             opacity: .65;
             cursor: wait;
         }
+
         /* adapta a pagina para celulares e tablets */
         @media (max-width: 700px) {
+
             /* diminui a altura e o espacamento da barra */
             .barra-superior {
                 height: 76px;
                 padding: 0 20px;
             }
+
             /* diminui a logo em telas menores */
             .topbar-logo img {
                 width: 48px;
                 height: 48px;
                 object-fit: contain;
             }
+
             /* reduz o espacamento do conteudo principal */
             main {
                 padding: 24px 18px;
             }
+
             /* ajusta o titulo em telas menores */
             .cabecalho-pagina h1 {
                 font-size: 22px;
             }
+
             /* reduz o espacamento interno dos modais */
             .modal-conteudo {
                 padding: 20px;
             }
         }
+
         /* adapta os elementos para celulares bem pequenos */
         @media (max-width: 380px) {
+
             /* diminui as margens laterais */
             main {
                 padding: 20px 12px;
             }
+
             /* reduz o espacamento dos cartoes */
             .dieta {
                 padding: 14px;
             }
+
             /* deixa os botoes ocuparem a largura toda */
             .acoes-modal .botao {
                 width: 100%;
@@ -417,6 +479,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- cria a barra superior com a logo e o botao do menu -->
     <header class="barra-superior">
@@ -517,17 +580,23 @@
                 <div class="campo">
                     <label>Qual sua nota para esta dieta?</label>
                     <div class="estrelas" id="seletorEstrelas" aria-label="Nota de 1 a 5">
-                        <button class="estrela" type="button" data-nota="1" aria-label="1 estrela" aria-pressed="false">★</button>
-                        <button class="estrela" type="button" data-nota="2" aria-label="2 estrelas" aria-pressed="false">★</button>
-                        <button class="estrela" type="button" data-nota="3" aria-label="3 estrelas" aria-pressed="false">★</button>
-                        <button class="estrela" type="button" data-nota="4" aria-label="4 estrelas" aria-pressed="false">★</button>
-                        <button class="estrela" type="button" data-nota="5" aria-label="5 estrelas" aria-pressed="false">★</button>
+                        <button class="estrela" type="button" data-nota="1" aria-label="1 estrela"
+                            aria-pressed="false">★</button>
+                        <button class="estrela" type="button" data-nota="2" aria-label="2 estrelas"
+                            aria-pressed="false">★</button>
+                        <button class="estrela" type="button" data-nota="3" aria-label="3 estrelas"
+                            aria-pressed="false">★</button>
+                        <button class="estrela" type="button" data-nota="4" aria-label="4 estrelas"
+                            aria-pressed="false">★</button>
+                        <button class="estrela" type="button" data-nota="5" aria-label="5 estrelas"
+                            aria-pressed="false">★</button>
                     </div>
                 </div>
                 <!-- campo para escrever o comentario -->
                 <div class="campo">
                     <label for="comentarioFeedback">Comentário</label>
-                    <textarea id="comentarioFeedback" maxlength="1000" placeholder="Conte como foi esta dieta..."></textarea>
+                    <textarea id="comentarioFeedback" maxlength="1000"
+                        placeholder="Conte como foi esta dieta..."></textarea>
                 </div>
                 <!-- mostra mensagens de validacao e envio -->
                 <p id="mensagemFeedback" aria-live="polite"></p>
@@ -612,13 +681,13 @@
             // trata timestamps do firebase no formato seconds
             if (typeof valor === "object" && typeof valor.seconds === "number") {
                 data = new Date(valor.seconds * 1000);
-            // trata timestamps do firebase no formato _seconds
+                // trata timestamps do firebase no formato _seconds
             } else if (typeof valor === "object" && typeof valor._seconds === "number") {
                 data = new Date(valor._seconds * 1000);
-            // converte outras datas que chegam como texto
+                // converte outras datas que chegam como texto
             } else if (typeof valor === "string") {
                 data = new Date(valor);
-            // retorna uma mensagem se o formato nao for reconhecido
+                // retorna uma mensagem se o formato nao for reconhecido
             } else {
                 return "Não informada";
             }
@@ -804,4 +873,5 @@
         carregarDietas();
     </script>
 </body>
+
 </html>
