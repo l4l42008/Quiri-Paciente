@@ -8,7 +8,9 @@ const { getFirestore } = require("firebase-admin/firestore");
 const { getAuth } = require("firebase-admin/auth");
 
 // carrega a chave do firebase
-const chaveFirebase = require("./firebase-key.json");
+const chaveFirebase = process.env.FIREBASE_KEY
+    ? JSON.parse(process.env.FIREBASE_KEY)
+    : require("./firebase-key.json");
 
 // inicia o firebase usando a chave do projeto
 initializeApp({
