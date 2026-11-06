@@ -275,7 +275,7 @@ formulario.addEventListener("submit", async function (evento) {
             // redireciona para a pagina de confirmacao
             setTimeout(function () {
                 const destino = new URL(
-                    "/auth-pendente.html",
+                    "/cadastrado.html",
                     window.location.origin
                 );
 
